@@ -74,6 +74,23 @@ Você pode testar e explorar as telas através do protótipo interativo:
 
 ---
 
+## 🛠️ Tecnologias
+
+> Escolhidas para equilibrar **baixa curva de aprendizado** e **aderência ao mercado atual**.
+
+| Tecnologia | Função |
+|---|---|
+| [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/) | Framework mobile cross-platform (iOS e Android com um único código) |
+| [TypeScript](https://www.typescriptlang.org/) | Linguagem principal com tipagem estática |
+| [NativeWind](https://www.nativewind.dev/) | Estilização com sintaxe Tailwind CSS |
+| [React Navigation](https://reactnavigation.org/) | Navegação entre telas |
+| [Zustand](https://zustand-demo.pmnd.rs/) | Gerenciamento de estado global |
+| [Axios](https://axios-http.com/) | Consumo de APIs REST |
+
+> 💡 **Para começar:** instale o [Node.js](https://nodejs.org/), o app **Expo Go** no seu celular e siga o [Quickstart do Expo](https://docs.expo.dev/get-started/create-a-project/).
+
+---
+
 ## 👥 Público-Alvo
 
 | Segmento                   | Perfil                                                                                 |
