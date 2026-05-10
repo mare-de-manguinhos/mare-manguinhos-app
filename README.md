@@ -134,6 +134,43 @@ Você pode testar e explorar as telas através do protótipo interativo:
 
 ---
 
+## 🚀 Primeiros Passos (Bootstrap)
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (v18+)
+- [Git](https://git-scm.com/)
+- App **Expo Go** instalado no celular ([Android](https://play.google.com/store/apps/details?id=host.exp.exponent) / [iOS](https://apps.apple.com/app/expo-go/id982107779))
+
+### Instalação
+
+```bash
+# 1. Clone o repositório
+git clone <url-do-repositorio>
+cd mare-manguinhos-app
+
+# 2. Instale as dependências
+npm install
+```
+
+### Rodando o projeto
+
+```bash
+npx expo start
+```
+
+Após o servidor iniciar, escolha como visualizar:
+
+| Opção | Como |
+|---|---|
+| **Celular (Expo Go)** | Escaneie o QR code exibido no terminal com o app Expo Go |
+| **Navegador (web)** | Pressione `w` no terminal após o servidor subir |
+| **Emulador Android** | Pressione `a` (requer Android Studio configurado) |
+
+> A visualização web é útil para desenvolvimento de UI, mas o alvo final do app é **iOS e Android**.
+
+---
+
 ## 🤝 Contribuindo
 
 ```bash
