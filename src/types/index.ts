@@ -69,6 +69,115 @@ export interface AuthStore {
   token: string | null;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
+  register: (payload: RegisterPayload) => Promise<void>;
+}
+
+// ---------------------------------------------------------------------------
+// Auth Feature Types
+// ---------------------------------------------------------------------------
+
+export interface AuthCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  nome: string;
+  email: string;
+  telefone: string; // raw digits: "27999999999"
+  password: string;
+  endereco: {
+    cep: string;
+    logradouro: string;
+    numero: string;
+    complemento?: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+  };
+}
+
+export interface LoginFormState {
+  email: string;
+  password: string;
+  showPassword: boolean;
+  loading: boolean;
+  tentativasFalhas: number;
+  errors: {
+    email?: string;
+    password?: string;
+    geral?: string;
+  };
+}
+
+export interface BasicFormState {
+  nome: string;
+  email: string;
+  confirmEmail: string;
+  password: string;
+  confirmPassword: string;
+  telefone: string;
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  errors: {
+    nome?: string;
+    email?: string;
+    confirmEmail?: string;
+    password?: string;
+    confirmPassword?: string;
+    telefone?: string;
+  };
+}
+
+export interface AddressFormState {
+  cep: string;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  loading: boolean;
+  errors: {
+    cep?: string;
+    logradouro?: string;
+    numero?: string;
+    bairro?: string;
+    cidade?: string;
+    estado?: string;
+    geral?: string;
+  };
+}
+
+export type RegisterStep = 1 | 2;
+
+// ---------------------------------------------------------------------------
+// Component Prop Interfaces
+// ---------------------------------------------------------------------------
+
+export interface AppButtonProps {
+  readonly label: string;
+  readonly onPress: () => void;
+  readonly loading?: boolean;
+  readonly disabled?: boolean;
+  readonly variant?: 'primary' | 'secondary';
+  readonly accessibilityLabel: string;
+}
+
+export interface AppInputProps {
+  readonly label: string;
+  readonly value: string;
+  readonly onChangeText: (text: string) => void;
+  readonly placeholder?: string;
+  readonly error?: string;
+  readonly secureTextEntry?: boolean;
+  readonly onToggleSecure?: () => void;
+  readonly keyboardType?: import('react-native').KeyboardTypeOptions;
+  readonly autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  readonly accessibilityLabel: string;
+  readonly accessibilityHint?: string;
+  readonly onBlur?: () => void;
+  readonly editable?: boolean;
 }
 
 export interface CarrinhoStore {
