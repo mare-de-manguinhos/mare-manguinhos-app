@@ -20,6 +20,8 @@
 
 Este repositório contém o desenvolvimento do **módulo Consumidor** do ecossistema Maré de Manguinhos — a plataforma mobile que conecta moradores e compradores ao pescado fresco da Associação de Pescadores de Manguinhos, com entrega em domicílio e pagamento digital.
 
+**Atenção desenvolvedor:** Este projeto é desenvolvido com os princípios de SDD (Spec-Driven Development), utilizando o GitHub Speckit integrado ao GitHub Copilot. Os scripts de automação do fluxo de desenvolvimento são executados via PowerShell.
+
 > ⚠️ **Escopo deste repositório:** apenas o app mobile do consumidor final (B2C).
 > Os módulos de Gestão (painel admin) e do Pescador (bot WhatsApp) são desenvolvidos por equipes separadas.
 
