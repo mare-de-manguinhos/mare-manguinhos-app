@@ -5,7 +5,7 @@
 
 ## Summary
 
-Implementação completa da UI das telas de Login e Registro do Maré de Manguinhos. As telas existem como stubs vazios em `src/screens/auth/`; esta feature os transforma em telas totalmente funcionais com validação local, paleta de cores praiana, suporte a acessibilidade e pontos de integração preparados para a API futura. Nenhuma chamada HTTP real é realizada — as ações de submit usam mocks com delay para simular respostas da API. O `authStore` Zustand é scaffoldado seguindo a interface `AuthStore` já definida em `src/types/index.ts`, pronto para receber a integração real.
+Implementação completa da UI das telas de Login e Registro do Maré de Manguinhos. As telas existem como stubs vazios em `src/screens/auth/`; esta feature os transforma em telas totalmente funcionais com identidade visual viva (cabeçalho decorativo de oceano, cards com sombra, feedback de toque), scroll habilitado em todos os ecrãs, cadastro em **duas etapas** (Dados Básicos + Endereço com campos padrão de delivery), validação local, paleta de cores praiana, suporte a acessibilidade e pontos de integração preparados para a API futura. Nenhuma chamada HTTP real é realizada — as ações de submit usam mocks com delay para simular respostas da API. O `authStore` Zustand é scaffoldado seguindo a interface `AuthStore` já definida em `src/types/index.ts`, pronto para receber a integração real.
 
 ## Technical Context
 
@@ -17,7 +17,7 @@ Implementação completa da UI das telas de Login e Registro do Maré de Manguin
 **Project Type**: mobile-app (Expo managed workflow)  
 **Performance Goals**: 60 fps; resposta ao toque < 16ms; validação inline instantânea (sem debounce)  
 **Constraints**: Expo managed workflow — sem dependências nativas fora do ecossistema Expo; sem bibliotecas de formulário (React Hook Form, Formik, etc.); `useState` simples para todos os campos; sem cache client-side  
-**Scale/Scope**: 2 telas (LoginScreen, RegisterScreen), 2 componentes UI reutilizáveis, 1 store, 1 utility
+**Scale/Scope**: 2 telas (LoginScreen, RegisterScreen com 2 etapas), 4 componentes UI reutilizáveis, 1 store, 2 utilities
 
 ## Constitution Check
 
@@ -60,27 +60,30 @@ specs/001-auth-screens-ui/
 src/
 ├── screens/
 │   └── auth/
-│       ├── LoginScreen.tsx        # MODIFY — stub → implementação completa
-│       └── RegisterScreen.tsx     # MODIFY — stub → implementação completa
+│       ├── LoginScreen.tsx        # MODIFY — stub → implementação completa com cabeçalho decorativo e ScrollView
+│       └── RegisterScreen.tsx     # MODIFY — stub → implementação de 2 etapas (Dados Básicos + Endereço) com ScrollView
 ├── components/
 │   ├── ui/
 │   │   ├── AppInput.tsx           # CREATE — input reutilizável com estado de erro e acessibilidade
-│   │   └── AppButton.tsx          # CREATE — botão primário com loading state
+│   │   ├── AppButton.tsx          # CREATE — botão primário com loading state e feedback de toque
+│   │   └── StepIndicator.tsx      # CREATE — indicador de progresso em 2 etapas para o registro
 │   └── shared/
-│       └── AppLogo.tsx            # CREATE — ícone + nome do app (usado no topo do login)
+│       ├── AppLogo.tsx            # CREATE — ícone + nome do app (usado no cabeçalho decorativo)
+│       └── OceanHeader.tsx        # CREATE — cabeçalho decorativo com gradiente/onda praiana + logo
 ├── store/
 │   └── authStore.ts               # CREATE — Zustand store implementando AuthStore interface
 ├── utils/
-│   └── formatPhone.ts             # CREATE — máscara de telefone brasileiro sem lib externa
+│   ├── formatPhone.ts             # CREATE — máscara de telefone brasileiro sem lib externa
+│   └── formatCEP.ts               # CREATE — máscara de CEP (00000-000) sem lib externa
 └── types/
-    └── index.ts                   # MODIFY — adicionar AuthCredentials, RegisterPayload, FormState types
+    └── index.ts                   # MODIFY — adicionar AuthCredentials, RegisterPayload (com endereco), BasicFormState, AddressFormState types
 
 tailwind.config.js                 # MODIFY — adicionar paleta de cores praiana no theme.extend.colors
 assets/
-└── app-icon.png                   # EXISTS — usado em AppLogo.tsx via <Image source={require(...)} />
+└── app-icon.png                   # EXISTS — usado em OceanHeader.tsx via <Image source={require(...)} />
 ```
 
-**Structure Decision**: Single project (mobile-only). Toda a feature fica em `src/screens/auth/` com componentes atômicos em `src/components/ui/`. Não há backend nesta feature. A estrutura segue o Princípio V da constituição (isolamento por feature).
+**Structure Decision**: Single project (mobile-only). Toda a feature fica em `src/screens/auth/` com componentes atômicos em `src/components/ui/` e compartilhados em `src/components/shared/`. Não há backend nesta feature. A estrutura segue o Princípio V da constituição (isolamento por feature).
 
 ## Complexity Tracking
 

@@ -27,37 +27,40 @@ Um usuário que já possui conta no Maré de Manguinhos abre o aplicativo e é a
 
 ---
 
-### User Story 2 — Criação de Nova Conta (Priority: P2)
+### User Story 2 — Criação de Nova Conta em Duas Etapas (Priority: P2)
 
-Um novo usuário que ainda não tem conta acessa a tela de registro a partir do link na tela de login. Ele preenche seus dados, confirma e vê uma tela de sucesso indicando que o cadastro foi concluído.
+Um novo usuário que ainda não tem conta acessa a tela de registro a partir do link na tela de login. O cadastro é dividido em duas etapas: **Etapa 1 — Dados Básicos** (nome, e-mail, senha e telefone) e **Etapa 2 — Endereço** (CEP, logradouro, número, complemento, bairro, cidade e estado). Após concluir as duas etapas, o usuário é automaticamente autenticado e redirecionado para a vitrine.
 
-**Why this priority**: O cadastro é o único caminho para novos usuários ingressarem no app. Sem ele, a base de consumidores não cresce.
+**Why this priority**: O cadastro é o único caminho para novos usuários ingressarem no app. A divisão em duas etapas reduz a percepção de complexidade e segue o padrão consagrado de apps de delivery.
 
-**Independent Test**: A tela de registro pode ser renderizada de forma isolada, com todos os campos validados localmente e estado de sucesso exibido ao final do preenchimento correto — sem necessidade de API real.
+**Independent Test**: A tela de registro pode ser renderizada de forma isolada, com as duas etapas navegáveis, validação local em cada etapa e estado de sucesso exibido ao final — sem necessidade de API real.
 
 **Acceptance Scenarios**:
 
-1. **Given** o usuário toca em "Ainda não tem conta? Cadastre-se" na tela de login, **When** a navegação ocorre, **Then** a tela de registro é exibida com todos os campos visíveis e seguindo a mesma paleta de cores praiana.
-2. **Given** o usuário está na tela de registro, **When** ele tenta submeter com campos obrigatórios vazios, **Then** mensagens de validação aparecem inline abaixo de cada campo inválido.
-3. **Given** o usuário preenche todos os campos corretamente, **When** ele toca em "Criar conta", **Then** o botão exibe estado de carregamento e, após sucesso (mockado), o usuário é automaticamente autenticado e redirecionado para a vitrine de pescados — sem precisar fazer login manualmente.
-4. **Given** o usuário preenche e-mails diferentes nos campos "E-mail" e "Confirmar e-mail" (ou senhas não coincidentes), **When** ele toca em "Criar conta", **Then** um erro inline informa a não-correspondência antes de qualquer chamada de API.
-5. **Given** o usuário está na tela de registro, **When** ele toca em "Já tenho conta? Entrar", **Then** navega para a tela de login e o formulário de registro é completamente limpo, de modo que ao retornar ao registro todos os campos estão vazios.
+1. **Given** o usuário toca em "Ainda não tem conta? Cadastre-se" na tela de login, **When** a navegação ocorre, **Then** a tela de registro é exibida na **Etapa 1 de 2** com indicador de progresso visível e todos os campos da etapa 1 em tela.
+2. **Given** o usuário está na Etapa 1, **When** ele toca em "Próximo" com campos obrigatórios da etapa 1 vazios ou inválidos, **Then** mensagens de validação aparecem inline abaixo de cada campo com problema e o usuário permanece na Etapa 1.
+3. **Given** o usuário preenche corretamente todos os campos da Etapa 1, **When** ele toca em "Próximo", **Then** a tela avança para a **Etapa 2 de 2** com indicador de progresso atualizado e os dados da Etapa 1 preservados em memória.
+4. **Given** o usuário está na Etapa 2, **When** ele toca em "Voltar", **Then** retorna para a Etapa 1 com todos os dados já preenchidos anteriormente preservados nos campos.
+5. **Given** o usuário preenche e-mails diferentes nos campos "E-mail" e "Confirmar e-mail" (ou senhas não coincidentes), **When** ele toca em "Próximo", **Then** um erro inline informa a não-correspondência antes de avançar.
+6. **Given** o usuário preenche todos os campos da Etapa 2 corretamente, **When** ele toca em "Criar conta", **Then** o botão exibe estado de carregamento e, após sucesso (mockado), o usuário é automaticamente autenticado e redirecionado para a vitrine de pescados — sem precisar fazer login manualmente.
+7. **Given** o usuário está na Etapa 1 do registro, **When** ele toca em "Já tenho conta? Entrar", **Then** navega para a tela de login e o formulário de registro é completamente limpo, de modo que ao retornar ao cadastro ambas as etapas estão com campos vazios e sem erros residuais.
 
 ---
 
-### User Story 3 — Experiência Visual Coesa com Paleta Praiana (Priority: P3)
+### User Story 3 — Experiência Visual Viva com Identidade Praiana (Priority: P3)
 
-Tanto a tela de login quanto a de registro seguem a identidade visual do aplicativo: paleta de cores inspirada no mar e na praia de Manguinhos, uso do ícone oficial do app (`app-icon.png`) e tipografia consistente.
+Tanto a tela de login quanto a de registro transmitem a identidade do Maré de Manguinhos através de elementos decorativos inspirados no oceano (ondas, gradientes, ilustrações de praia), não sendo telas planas. O scroll funciona suavemente em ambas as telas, garantindo que nenhum campo fique inacessível em dispositivos compactos.
 
-**Why this priority**: A identidade visual é necessária para a aceitação do produto pela comunidade local e para transmitir confiança. É validável independentemente da funcionalidade.
+**Why this priority**: A identidade visual e a experiência de rolagem são necessárias para a aceitação do produto pela comunidade local e para transmitir confiança. São validáveis independentemente da funcionalidade.
 
-**Independent Test**: As duas telas podem ser avaliadas visualmente em comparação à paleta de cores definida neste documento, verificando cores, ícone, espaçamentos e tipografia — sem interação funcional.
+**Independent Test**: As duas telas podem ser avaliadas visualmente: verificar elementos decorativos presentes (ondas, gradiente, ilustração); rolar até o final de cada tela em um dispositivo com tela de 320px e confirmar que todos os campos ficam visíveis — sem interação funcional.
 
 **Acceptance Scenarios**:
 
-1. **Given** qualquer uma das telas de auth é aberta, **When** inspecionada visualmente, **Then** todas as cores utilizadas pertencem à paleta praiana definida nesta spec.
-2. **Given** a tela de login, **When** renderizada, **Then** o logotipo/ícone do app é exibido de forma proeminente no topo.
-3. **Given** as telas são exibidas em dispositivos com temas claro e escuro, **When** o tema do sistema é verificado, **Then** as telas seguem o tema claro por padrão (modo escuro é escopo futuro).
+1. **Given** qualquer uma das telas de auth é aberta, **When** inspecionada visualmente, **Then** todas as cores utilizadas pertencem à paleta praiana definida nesta spec e pelo menos um elemento decorativo inspirado no oceano/praia é visível.
+2. **Given** a tela de login, **When** renderizada, **Then** o logotipo/ícone do app é exibido de forma proeminente no topo dentro de uma área de cabeçalho com gradiente ou onda decorativa.
+3. **Given** qualquer tela de auth em dispositivo com tela de 320px, **When** o usuário rola para baixo, **Then** todos os campos e botões ficam acessíveis sem sobreposição de elementos.
+4. **Given** as telas são exibidas em dispositivos com temas claro e escuro, **When** o tema do sistema é verificado, **Then** as telas seguem o tema claro por padrão (modo escuro é escopo futuro).
 
 ---
 
@@ -67,9 +70,12 @@ Tanto a tela de login quanto a de registro seguem a identidade visual do aplicat
 - O que acontece quando o usuário digita um e-mail em formato inválido? → Validação inline imediata ao sair do campo (evento `onBlur`).
 - O que acontece quando o campo de senha está visível (toggle de "mostrar senha")? → O campo deve exibir/ocultar o conteúdo sem perder o foco ou apagar o texto.
 - O que acontece se o teclado virtual cobrir o campo que o usuário está preenchendo? → A tela deve rolar suavemente para manter o campo ativo visível acima do teclado.
-- O que acontece em telas pequenas (ex: 320px de largura)? → O layout deve permanecer funcional e legível, sem elementos sobrepostos.
+- O que acontece em telas pequenas (ex: 320px de largura)? → O layout deve permanecer funcional e legível em ambas as etapas, sem elementos sobrepostos, com scroll funcional.
 - O que acontece quando o usuário toca repetidamente no botão "Entrar" antes do carregamento terminar? → O botão deve ser desabilitado durante o estado de carregamento para evitar chamadas duplicadas.
 - O que acontece após 5 tentativas de login com credenciais inválidas? → A tela exibe um aviso destacado de bloqueio temporário e orienta o usuário a usar o link "Esqueci minha senha" para recuperar o acesso. O botão "Entrar" permanece desabilitado até que o usuário interaja com a opção de recuperação ou reinicie o app.
+- O que acontece quando o usuário volta da Etapa 2 para a Etapa 1 do registro? → Os dados já preenchidos na Etapa 1 devem ser preservados nos campos; nenhum dado é apagado ao navegar entre etapas.
+- O que acontece se o usuário digitar um CEP na Etapa 2? → O campo CEP aplica máscara automática (00000-000); os demais campos de endereço permanecem para preenchimento manual (busca automática de CEP é escopo futuro).
+- O que acontece se o usuário tocar em "Próximo" na Etapa 1 sem preencher campos obrigatórios? → A tela não avança; os campos inválidos exibem erros inline e o scroll posiciona o primeiro campo com erro no campo de visão.
 
 ---
 
@@ -92,29 +98,41 @@ Tanto a tela de login quanto a de registro seguem a identidade visual do aplicat
 
 - **FR-026**: Após 5 tentativas consecutivas de login com credenciais inválidas (contabilizadas no estado local da tela), a tela de login DEVE exibir um aviso destacado de bloqueio temporário e desabilitar o botão "Entrar", orientando o usuário a utilizar o fluxo de recuperação de senha.
 
-**Tela de Registro:**
+**Tela de Registro — Etapa 1 (Dados Básicos):**
 
-- **FR-011**: A tela de registro DEVE conter os seguintes campos obrigatórios: Nome completo, E-mail, Confirmar e-mail, Senha, Confirmar senha, Telefone (WhatsApp).
-- **FR-012**: A tela de registro DEVE conter o seguinte campo opcional: Bairro/Localidade (para personalização da vitrine).
-- **FR-013**: A tela de registro DEVE validar localmente: correspondência entre e-mails, correspondência entre senhas, formato de e-mail válido, telefone no formato brasileiro, senha com mínimo de 8 caracteres.
+- **FR-011**: A tela de registro DEVE exibir a **Etapa 1 de 2** com um indicador de progresso visual (step indicator) no topo, contendo os seguintes campos obrigatórios: Nome completo, E-mail, Confirmar e-mail, Senha, Confirmar senha, Telefone (WhatsApp).
+- **FR-012**: A tela de registro DEVE exibir um botão "Próximo" na Etapa 1 que valida todos os campos da etapa antes de avançar; em caso de validação falha, erros inline são exibidos e o usuário permanece na Etapa 1.
+- **FR-013**: A tela de registro DEVE validar localmente na Etapa 1: correspondência entre e-mails, correspondência entre senhas, formato de e-mail válido, telefone no formato brasileiro, senha com mínimo de 8 caracteres, nome com mínimo de 3 caracteres.
 - **FR-014**: A tela de registro DEVE exibir mensagens de erro inline abaixo de cada campo com problema de validação.
-- **FR-015**: A tela de registro DEVE exibir um botão primário "Criar conta" com estado de carregamento durante o processamento.
+- **FR-019**: Os campos de senha na Etapa 1 DEVEM oferecer toggle de visibilidade individualmente.
+
+**Tela de Registro — Etapa 2 (Endereço):**
+
+- **FR-028**: A tela de registro DEVE exibir a **Etapa 2 de 2** com os seguintes campos de endereço no padrão de apps de delivery: CEP (obrigatório), Logradouro/Rua (obrigatório), Número (obrigatório), Complemento (opcional — ex: Apto, Bloco), Bairro (obrigatório), Cidade (obrigatório), Estado/UF (obrigatório).
+- **FR-029**: O campo CEP DEVE aplicar máscara automática no formato `00000-000` conforme o usuário digita.
+- **FR-030**: A tela de registro DEVE exibir um botão "Voltar" na Etapa 2 que retorna para a Etapa 1 preservando todos os dados já preenchidos em ambas as etapas.
+- **FR-031**: A tela de registro DEVE validar localmente na Etapa 2: CEP com 8 dígitos (sem máscara), logradouro não vazio, número não vazio, bairro não vazio, cidade não vazia, estado não vazio.
+- **FR-015**: A tela de registro DEVE exibir um botão primário "Criar conta" **somente na Etapa 2** com estado de carregamento durante o processamento.
 - **FR-016**: Ao submeter com sucesso (mockado), o sistema DEVE autenticar o usuário automaticamente e redirecioná-lo para a vitrine de pescados, sem exigir login manual. Uma confirmação visual breve (ex: toast) MAY ser exibida durante a transição.
-- **FR-017**: A tela de registro DEVE conter um link "Já tenho conta? Entrar" que retorna para a tela de login.
-- **FR-018**: A tela de registro DEVE expor um ponto de integração claro e bem definido para receber os dados do formulário e repassá-los à camada de cadastro quando esta for integrada.
-- **FR-019**: Os campos de senha na tela de registro DEVEM oferecer toggle de visibilidade individualmente.
-- **FR-027**: Ao navegar da tela de registro para a tela de login (via link "Já tenho conta? Entrar"), o formulário de registro DEVE ser completamente resetado, de modo que ao retornar ao cadastro todos os campos estejam vazios e sem erros de validação residuais.
+- **FR-017**: A tela de registro DEVE conter um link "Já tenho conta? Entrar" visível na Etapa 1 que retorna para a tela de login.
+- **FR-018**: A tela de registro DEVE expor um ponto de integração claro e bem definido para receber os dados completos das duas etapas (dados básicos + endereço) e repassá-los à camada de cadastro quando esta for integrada.
+- **FR-019**: Os campos de senha na Etapa 1 DEVEM oferecer toggle de visibilidade individualmente.
+- **FR-027**: Ao navegar da tela de registro para a tela de login (via link "Já tenho conta? Entrar"), o formulário de registro DEVE ser completamente resetado, de modo que ao retornar ao cadastro ambas as etapas estejam com campos vazios e sem erros de validação residuais.
 
 - **FR-024**: Quando o cadastro retornar conflito de e-mail duplicado (mockado), a tela de registro DEVE exibir um erro inline abaixo do campo de e-mail com o texto “Este e-mail já está cadastrado” e um link navegável “Fazer login” que redireciona para a tela de login.
 
 - **FR-025**: Todos os campos de entrada, botões e links das telas de autenticação DEVEM possuir rótulos descritivos legíveis por leitores de tela (ex: VoiceOver, TalkBack), garantindo acessibilidade mínima para o público-alvo que inclui idosos e pessoas com deficiência visual.
 
-**Paleta de Cores e Visual:**
+**Scroll e Experiência de Rolagem:**
 
-- **FR-020**: Todas as telas de autenticação DEVEM seguir a paleta de cores praiana definida nesta spec (ver seção Paleta de Cores abaixo).
-- **FR-021**: Os componentes de input, botão primário e links DEVEM seguir o design system definido pela paleta.
-- **FR-022**: O layout DEVE ser responsivo e funcional em telas com largura entre 320px e 430px.
-- **FR-023**: O teclado virtual NÃO DEVE cobrir o campo de entrada ativo — quando o teclado virtual abre, o campo em foco DEVE permanecer visível acima do teclado.
+- **FR-032**: Ambas as telas de autenticação DEVEM ser envoltas em `ScrollView` para garantir que todo o conteúdo seja acessível através de rolagem vertical em qualquer dispositivo suportado, inclusive em dispositivos compactos (320px de largura).
+- **FR-033**: Quando o teclado virtual estiver ativo, a tela DEVE rolar automaticamente para manter o campo em foco visível acima do teclado; `KeyboardAvoidingView` DEVE ser utilizado em conjunto com o `ScrollView`.
+
+**Identidade Visual Viva:**
+
+- **FR-034**: Ambas as telas DEVEM incluir um elemento decorativo visual de topo inspirado no oceano/praia (ex: onda SVG, gradiente do azul mar ao branco, ou área de cabeçalho com cor sólida da paleta) que ocupa a porção superior da tela e enquadra o logo do aplicativo, tornando a tela não-plana.
+- **FR-035**: O formulário em cada tela DEVE ser apresentado dentro de um cartão (card) com sombra suave (`shadow`) e cantos arredondados, criando profundidade visual em relação ao fundo.
+- **FR-036**: Elementos interativos (botões, links) DEVEM fornecer feedback visual de pressão (ex: `activeOpacity` ou `Pressable` com estado `pressed`) para transmitir responsividade ao toque.
 
 ---
 
@@ -141,10 +159,12 @@ Inspirada no ícone oficial do app: oceano profundo, ondas em teal, areia dourad
 
 ### Key Entities *(include if feature involves data)*
 
-- **Usuário (Consumer)**: Representa o comprador de pescado. Atributos relevantes para cadastro: `id`, `nome`, `email`, `telefone`, `bairro`, `senha` (nunca armazenada em plain text), `criadoEm`.
-- **FormState**: Representa o estado local de cada formulário (valores dos campos, erros de validação, estado de carregamento, estado de sucesso).
+- **Usuário (Consumer)**: Representa o comprador de pescado. Atributos relevantes para cadastro: `id`, `nome`, `email`, `telefone`, `senha` (nunca armazenada em plain text), `criadoEm`.
+- **Endereço**: Representa os dados de endereço do usuário coletados na Etapa 2 do cadastro: `cep`, `logradouro`, `numero`, `complemento?`, `bairro`, `cidade`, `estado`.
+- **BasicFormState**: Estado local da Etapa 1 do formulário de registro (valores dos campos de dados básicos, erros de validação, etapa atual).
+- **AddressFormState**: Estado local da Etapa 2 do formulário de registro (valores dos campos de endereço, erros de validação).
 - **AuthCredentials**: Estrutura de dados enviada ao submeter login `{ email: string, password: string }`.
-- **RegisterPayload**: Estrutura de dados enviada ao submeter registro `{ nome, email, telefone, bairro?, senha }`.
+- **RegisterPayload**: Estrutura de dados enviada ao submeter registro `{ nome, email, telefone, senha, endereco: { cep, logradouro, numero, complemento?, bairro, cidade, estado } }`.
 
 ---
 
@@ -160,6 +180,9 @@ Inspirada no ícone oficial do app: oceano profundo, ondas em teal, areia dourad
 - **SC-006**: A tela de login e a tela de registro renderizam corretamente (sem overflow ou sobreposição de elementos) em dispositivos com telas entre 320px e 430px de largura.
 - **SC-007**: Ao tocar em "Criar conta" com todos os campos válidos, uma confirmação visual de sucesso é exibida ao usuário em até 500ms após o mock responder.
 - **SC-008**: A navegação entre tela de login e tela de registro (em ambas as direções) ocorre sem erros de tela em branco ou resets indesejados de estado.
+- **SC-011**: Ao retornar da Etapa 2 para a Etapa 1 do registro via botão "Voltar", 100% dos dados preenchidos na Etapa 1 são preservados nos campos exatamente como foram digitados.
+- **SC-012**: Em um dispositivo com tela de 320px de largura, o usuário consegue rolar e acessar todos os campos e botões de ambas as telas sem que nenhum elemento fique cortado ou inacessível.
+- **SC-013**: Ambas as telas possuem pelo menos um elemento decorativo visual (onda, gradiente ou cabeçalho colorido) e um card de formulário com sombra visível, distinguindo as telas de uma tela completamente plana.
 
 ---
 
@@ -181,6 +204,8 @@ Inspirada no ícone oficial do app: oceano profundo, ondas em teal, areia dourad
 - A autenticação final será baseada em e-mail e senha (sem login social no MVP), conforme definido no PRD (seção 7 — fora do MVP: login social).
 - O campo "Telefone" usará o WhatsApp como canal de comunicação, o que justifica sua obrigatoriedade no cadastro (o backend do sistema usa WhatsApp como canal de notificação para os pescadores; o frontend deve estar alinhado).
 - O campo "Bairro/Localidade" é opcional no cadastro e serve para personalização futura da vitrine; o usuário poderá preenchê-lo depois no perfil.
+- O cadastro é dividido em duas etapas: Etapa 1 (Dados Básicos) e Etapa 2 (Endereço), seguindo o padrão de apps de delivery brasileiros. Todos os campos de endereço são obrigatórios exceto Complemento.
+- A busca automática de CEP (via API ViaCEP ou similar) é escopo futuro; no MVP o usuário preenche manualmente todos os campos após digitar o CEP (com máscara automática no formato `00000-000`).
 - Não há integração real com API nesta fase — as ações `onLoginSubmit` e `onRegisterSubmit` serão simuladas com mocks/delays para validar a experiência de carregamento e erro.
 - O estado de autenticação persistido (ex: token JWT) será gerenciado por um store Zustand (`useAuthStore`) já preparado para receber os dados quando a API for integrada.
 - O público-alvo inclui usuários idosos (35–65 anos conforme PRD), justificando o suporte mínimo a leitores de tela como requisito do MVP.
