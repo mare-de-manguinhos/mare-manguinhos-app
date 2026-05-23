@@ -85,7 +85,7 @@ Tanto a tela de login quanto a de registro transmitem a identidade do Maré de M
 
 **Tela de Login:**
 
-- **FR-001**: A tela de login DEVE exibir o ícone oficial do aplicativo (`app-icon.png`) no topo, como elemento de identidade da marca.
+- **FR-001**: A tela de login DEVE exibir o ícone oficial do aplicativo (`Logo.png`) no topo, como elemento de identidade da marca.
 - **FR-002**: A tela de login DEVE conter um campo de entrada para e-mail e um campo de entrada para senha (com conteúdo oculto por padrão).
 - **FR-003**: A tela de login DEVE oferecer um ícone de alternância (toggle) dentro do campo de senha para revelar/ocultar o texto digitado.
 - **FR-004**: A tela de login DEVE exibir um botão primário "Entrar" com estado de carregamento visual (spinner/loading indicator) durante o processamento.

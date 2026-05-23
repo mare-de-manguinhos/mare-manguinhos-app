@@ -145,7 +145,7 @@ export default function RegisterScreen() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FDF6EC' }}>
+    <View style={{ flex: 1, backgroundColor: '#FBF6EF' }}>
       <ScrollView
         ref={scrollViewRef}
         contentContainerStyle={{ paddingBottom: 48 }}
@@ -165,7 +165,7 @@ export default function RegisterScreen() {
           <View
             className="bg-espuma rounded-3xl"
             style={{
-              shadowColor: '#1C3A47',
+              shadowColor: '#2C241E',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.14,
               shadowRadius: 16,
@@ -177,7 +177,7 @@ export default function RegisterScreen() {
             <View
               style={{
                 height: 4,
-                backgroundColor: currentStep === 1 ? '#1A5F7A' : '#3A9E6A',
+                backgroundColor: currentStep === 1 ? '#D45D4A' : '#3FB27E',
               }}
             />
 
@@ -300,7 +300,7 @@ export default function RegisterScreen() {
                 >
                   <Text className="text-marinha text-sm">
                     Já tenho conta?{' '}
-                    <Text className="text-mar font-bold">Entrar</Text>
+                    <Text className="text-terracota font-bold">Entrar</Text>
                   </Text>
                 </Pressable>
               </>

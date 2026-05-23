@@ -24,7 +24,7 @@ export default function StepIndicator({
         const isLast = stepNumber === totalSteps;
 
         const circleClasses = isActive || isCompleted
-          ? 'bg-mar'
+          ? 'bg-terracota'
           : 'bg-pedra-mar';
         const textClasses = isActive || isCompleted
           ? 'text-espuma'
@@ -47,7 +47,7 @@ export default function StepIndicator({
             {!isLast && (
               <View
                 className={`flex-1 h-0.5 mx-2 mb-4 ${
-                  isCompleted ? 'bg-mar' : 'bg-pedra-mar'
+                  isCompleted ? 'bg-terracota' : 'bg-pedra-mar'
                 }`}
               />
             )}

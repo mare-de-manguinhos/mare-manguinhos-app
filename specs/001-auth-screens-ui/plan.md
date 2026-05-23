@@ -80,7 +80,7 @@ src/
 
 tailwind.config.js                 # MODIFY — adicionar paleta de cores praiana no theme.extend.colors
 assets/
-└── app-icon.png                   # EXISTS — usado em OceanHeader.tsx via <Image source={require(...)} />
+└── Logo.png                   # EXISTS — usado em OceanHeader.tsx via <Image source={require(...)} />
 ```
 
 **Structure Decision**: Single project (mobile-only). Toda a feature fica em `src/screens/auth/` com componentes atômicos em `src/components/ui/` e compartilhados em `src/components/shared/`. Não há backend nesta feature. A estrutura segue o Princípio V da constituição (isolamento por feature).

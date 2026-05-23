@@ -132,7 +132,7 @@ export default function AppLogo({ size = 'md', showTitle = true }: AppLogoProps)
   return (
     <View className="items-center gap-2">
       <Image
-        source={require('../../../assets/app-icon.png')}
+        source={require('../../../assets/Logo.png')}
         style={{ width: dim, height: dim, borderRadius: dim / 4 }}
         accessibilityLabel="Logo do Maré de Manguinhos"
       />

@@ -88,7 +88,7 @@ export default function VitrineScreen() {
   if (estado === 'carregando' && !dados) {
     return (
       <View className="flex-1 items-center justify-center bg-areia">
-        <ActivityIndicator size="large" color="#1A5F7A" accessibilityLabel="Carregando vitrine" />
+        <ActivityIndicator size="large" color="#D45D4A" accessibilityLabel="Carregando vitrine" />
       </View>
     );
   }
@@ -104,7 +104,7 @@ export default function VitrineScreen() {
         </Text>
         <Pressable
           onPress={carregar}
-          className="rounded-xl bg-mar px-10 py-4"
+          className="rounded-xl bg-terracota px-10 py-4"
           accessibilityLabel="Tentar novamente"
           accessibilityRole="button"
         >
@@ -127,7 +127,7 @@ export default function VitrineScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#1A5F7A"
+            tintColor="#D45D4A"
             accessibilityLabel="Recarregar vitrine"
           />
         }
@@ -140,14 +140,14 @@ export default function VitrineScreen() {
             {pescadorId && (
               <Pressable
                 onPress={() => setPescadorId(null)}
-                className="flex-row items-center rounded-full bg-mar/10 px-3 py-1.5"
+                className="flex-row items-center rounded-full bg-terracota/10 px-3 py-1.5"
                 accessibilityLabel="Limpar filtro de pescador"
                 accessibilityRole="button"
               >
-                <Text className="text-mar text-sm font-semibold mr-1">
+                <Text className="text-terracota text-sm font-semibold mr-1">
                   {dados.pescadores.find((p) => p.id === pescadorId)?.nome}
                 </Text>
-                <Ionicons name="close-outline" size={16} color="#1A5F7A" />
+                <Ionicons name="close-outline" size={16} color="#D45D4A" />
               </Pressable>
             )}
           </View>
@@ -164,11 +164,11 @@ export default function VitrineScreen() {
               {dados.pescadores.length > 10 && (
                 <Pressable
                   onPress={() => setPescadoresModalVisible(true)}
-                  className="h-20 w-20 rounded-full bg-mar items-center justify-center mr-4"
+                  className="h-20 w-20 rounded-full bg-terracota items-center justify-center mr-4"
                   accessibilityLabel="Ver todos os pescadores"
                   accessibilityRole="button"
                 >
-                  <Ionicons name="list-outline" size={24} color="#FAFCFD" />
+                  <Ionicons name="list-outline" size={24} color="#FFFCF7" />
                   <Text className="text-espuma text-[10px] font-bold mt-0.5">Ver +</Text>
                 </Pressable>
               )}
@@ -205,7 +205,7 @@ export default function VitrineScreen() {
           <Text className="text-ardosia text-xl font-bold mb-3">Disponível agora</Text>
           {produtosFiltrados.length === 0 ? (
             <View className="items-center py-12">
-              <Ionicons name="fish-outline" size={40} color="#5A7A87" style={{ marginBottom: 12 }} />
+              <Ionicons name="fish-outline" size={40} color="#6B655A" style={{ marginBottom: 12 }} />
               {buscaTermo.length >= 2 ? (
               <Text className="text-marinha text-base text-center">
                 Nenhum resultado para &ldquo;{buscaTermo}&rdquo;

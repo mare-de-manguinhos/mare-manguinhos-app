@@ -9,13 +9,13 @@ interface OceanHeaderProps {
 export default function OceanHeader({ title, subtitle }: OceanHeaderProps) {
   return (
     <View
-      className="bg-mar items-center px-6"
+      className="bg-terracota items-center px-6"
       style={{
         paddingTop: 56,
         paddingBottom: 44,
         borderBottomLeftRadius: 48,
         borderBottomRightRadius: 48,
-        shadowColor: '#0D3D52',
+        shadowColor: '#B3422E',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.25,
         shadowRadius: 16,
@@ -25,12 +25,11 @@ export default function OceanHeader({ title, subtitle }: OceanHeaderProps) {
     >
       {/* Círculo decorativo atrás do logo */}
       <View
-        className="bg-mar-dark items-center justify-center mb-3"
-        style={{ width: 96, height: 96, borderRadius: 24, opacity: 0.6, position: 'absolute', top: 44 }}
+        className="bg-terracota-escuro items-center justify-center mb-3"
       />
       <Image
-        source={require('../../../assets/app-icon.png')}
-        style={{ width: 84, height: 84, borderRadius: 20, zIndex: 1 }}
+        source={require('../../../assets/Logo.png')}
+        style={{ width: 84, height: 84, zIndex: 1 }}
         accessibilityLabel="Logo do Maré de Manguinhos"
         resizeMode="contain"
       />

@@ -22,11 +22,11 @@ export default function PescadorCard({ pescador, selected, onPress }: Props) {
     >
       <View
         className="h-20 w-20 items-center justify-center overflow-hidden rounded-full"
-        style={{ borderWidth: selected ? 4 : 0, borderColor: selected ? '#1A5F7A' : 'transparent' }}
+        style={{ borderWidth: selected ? 4 : 0, borderColor: selected ? '#D45D4A' : 'transparent' }}
       >
         {imageError ? (
           <View className="h-full w-full items-center justify-center bg-pedra-mar/30 rounded-full">
-            <Text className="text-mar text-2xl font-bold">{pescador.nome.charAt(0)}</Text>
+            <Text className="text-terracota text-2xl font-bold">{pescador.nome.charAt(0)}</Text>
           </View>
         ) : (
           <Image

@@ -36,12 +36,12 @@ export default function SearchBar({
 
   return (
     <View className="flex-row items-center rounded-xl bg-espuma px-4 py-3">
-      <Ionicons name="search-outline" size={20} color="#5A7A87" style={{ marginRight: 8 }} />
+      <Ionicons name="search-outline" size={20} color="#6B655A" style={{ marginRight: 8 }} />
       <TextInput
         value={localText}
         onChangeText={handleChange}
         placeholder={placeholder}
-        placeholderTextColor="#5A7A87"
+        placeholderTextColor="#6B655A"
         className="flex-1 text-ardosia text-base"
         accessibilityLabel="Buscar produtos"
         returnKeyType="search"
@@ -52,7 +52,7 @@ export default function SearchBar({
           accessibilityLabel="Limpar busca"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Ionicons name="close-outline" size={20} color="#5A7A87" />
+          <Ionicons name="close-outline" size={20} color="#6B655A" />
         </Pressable>
       )}
     </View>

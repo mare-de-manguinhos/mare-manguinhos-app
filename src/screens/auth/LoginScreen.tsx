@@ -72,7 +72,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FDF6EC' }}>
+    <View style={{ flex: 1, backgroundColor: '#FBF6EF' }}>
       <ScrollView
         contentContainerStyle={{ paddingBottom: 48 }}
         keyboardShouldPersistTaps="handled"
@@ -99,7 +99,7 @@ export default function LoginScreen() {
           <View
             className="bg-espuma rounded-3xl"
             style={{
-              shadowColor: '#1C3A47',
+              shadowColor: '#2C241E',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.14,
               shadowRadius: 16,
@@ -108,7 +108,7 @@ export default function LoginScreen() {
             }}
           >
             {/* Barra de acento no topo do card */}
-            <View className="bg-mar" style={{ height: 4 }} />
+            <View className="bg-terracota" style={{ height: 4 }} />
 
             <View style={{ padding: 24 }}>
               <AppInput
@@ -157,7 +157,7 @@ export default function LoginScreen() {
                 accessibilityLabel="Esqueci minha senha"
                 accessibilityRole="link"
               >
-                <Text className="text-oceano text-sm font-medium">
+                <Text className="text-oceano-claro text-sm font-medium">
                   Esqueci minha senha
                 </Text>
               </Pressable>
@@ -166,7 +166,7 @@ export default function LoginScreen() {
               {bloqueado && (
                 <View
                   className="rounded-2xl p-4 mb-4"
-                  style={{ backgroundColor: '#FFF3CD', borderWidth: 1, borderColor: '#F2A23A' }}
+                  style={{ backgroundColor: '#FEF3D5', borderWidth: 1, borderColor: '#E9B84C' }}
                 >
                   <Text className="text-ardosia text-sm text-center">
                     🔒 Muitas tentativas falhas. Use "Esqueci minha senha" para
@@ -197,9 +197,9 @@ export default function LoginScreen() {
 
           {/* Divisor */}
           <View className="flex-row items-center my-6">
-            <View className="flex-1" style={{ height: 1, backgroundColor: '#B8D4DC' }} />
+            <View className="flex-1" style={{ height: 1, backgroundColor: '#D6CFC4' }} />
             <Text className="text-marinha text-xs mx-3">ou</Text>
-            <View className="flex-1" style={{ height: 1, backgroundColor: '#B8D4DC' }} />
+            <View className="flex-1" style={{ height: 1, backgroundColor: '#D6CFC4' }} />
           </View>
 
           {/* Link de cadastro */}
@@ -211,7 +211,7 @@ export default function LoginScreen() {
           >
             <Text className="text-marinha text-sm">
               Ainda não tem conta?{'  '}
-              <Text className="text-mar font-bold">Criar conta grátis</Text>
+              <Text className="text-terracota font-bold">Criar conta grátis</Text>
             </Text>
           </Pressable>
         </View>

@@ -16,12 +16,12 @@ export default function AppNavigator() {
         tabBarIcon: ({ focused, color, size }) => (
           <TabIcon name={route.name} focused={focused} color={color} size={size} />
         ),
-        tabBarActiveTintColor: '#2E86AB',
-        tabBarInactiveTintColor: '#5A7A87',
+        tabBarActiveTintColor: '#3A9D8F',
+        tabBarInactiveTintColor: '#6B655A',
         tabBarStyle: {
-          backgroundColor: '#FDF6EC',
+          backgroundColor: '#FBF6EF',
           borderTopWidth: 1,
-          borderTopColor: '#B8D4DC',
+          borderTopColor: '#D6CFC4',
           paddingBottom: 16,
           paddingTop: 8,
           height: 72,

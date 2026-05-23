@@ -34,25 +34,25 @@ export default function PescadoresModal({ visible, pescadores, selectedId, onSel
               accessibilityLabel="Fechar"
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <Ionicons name="close-outline" size={24} color="#1C3A47" />
+              <Ionicons name="close-outline" size={24} color="#2C241E" />
             </Pressable>
           </View>
 
           <View className="px-5 py-3">
             <View className="flex-row items-center rounded-xl bg-areia px-4 py-3">
-              <Ionicons name="search-outline" size={20} color="#5A7A87" style={{ marginRight: 8 }} />
+              <Ionicons name="search-outline" size={20} color="#6B655A" style={{ marginRight: 8 }} />
               <TextInput
                 value={busca}
                 onChangeText={setBusca}
                 placeholder="Buscar pescador..."
-                placeholderTextColor="#5A7A87"
+                placeholderTextColor="#6B655A"
                 className="flex-1 text-ardosia text-base"
                 accessibilityLabel="Buscar pescador por nome"
                 returnKeyType="search"
               />
               {busca.length > 0 && (
                 <Pressable onPress={() => setBusca('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                  <Ionicons name="close-outline" size={20} color="#5A7A87" />
+                  <Ionicons name="close-outline" size={20} color="#6B655A" />
                 </Pressable>
               )}
             </View>
@@ -61,7 +61,7 @@ export default function PescadoresModal({ visible, pescadores, selectedId, onSel
           <ScrollView className="px-5 pb-6">
             {filtrados.length === 0 ? (
               <View className="items-center py-12">
-                <Ionicons name="search-outline" size={40} color="#5A7A87" />
+                <Ionicons name="search-outline" size={40} color="#6B655A" />
                 <Text className="text-marinha text-sm text-center mt-3">
                   Nenhum pescador encontrado para &ldquo;{busca}&rdquo;
                 </Text>
@@ -71,7 +71,7 @@ export default function PescadoresModal({ visible, pescadores, selectedId, onSel
                 <Pressable
                   key={p.id}
                   onPress={() => handleSelect(p.id)}
-                  className={`flex-row items-center py-4 px-3 rounded-xl mb-1 ${selectedId === p.id ? 'bg-mar/10' : ''}`}
+                  className={`flex-row items-center py-4 px-3 rounded-xl mb-1 ${selectedId === p.id ? 'bg-terracota/10' : ''}`}
                   accessibilityLabel={`Selecionar ${p.nome}`}
                   accessibilityRole="button"
                   accessibilityState={{ selected: selectedId === p.id }}
@@ -86,7 +86,7 @@ export default function PescadoresModal({ visible, pescadores, selectedId, onSel
                   </View>
                   <Text className="flex-1 text-ardosia text-base font-medium ml-3">{p.nome}</Text>
                   {selectedId === p.id && (
-                    <Ionicons name="checkmark-circle" size={22} color="#1A5F7A" />
+                    <Ionicons name="checkmark-circle" size={22} color="#D45D4A" />
                   )}
                 </Pressable>
               ))

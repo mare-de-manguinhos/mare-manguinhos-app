@@ -7,9 +7,9 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
 const badgeColors: Record<string, string> = {
-  Hoje: '#3A9E6A',
-  Premium: '#F2A23A',
-  Favorito: '#E05A5A',
+  Hoje: '#3FB27E',
+  Premium: '#E9B84C',
+  Favorito: '#D64550',
 };
 
 interface Props {
@@ -29,7 +29,7 @@ export default function ProdutoCard({ produto, onPress }: Props) {
       className="mb-4 overflow-hidden rounded-2xl bg-espuma"
       style={{
         width: CARD_WIDTH,
-        shadowColor: '#000',
+        shadowColor: '#2C241E',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -39,7 +39,7 @@ export default function ProdutoCard({ produto, onPress }: Props) {
       <View className="relative h-32 w-full">
         {imageError ? (
           <View className="h-full w-full items-center justify-center bg-pedra-mar/20">
-            <Ionicons name="fish-outline" size={36} color="#5A7A87" />
+            <Ionicons name="fish-outline" size={36} color="#6B655A" />
           </View>
         ) : (
           <Image
@@ -56,7 +56,7 @@ export default function ProdutoCard({ produto, onPress }: Props) {
               <View
                 key={badge}
                 className="rounded-full px-2 py-0.5"
-                style={{ backgroundColor: badgeColors[badge] || '#5A7A87' }}
+                style={{ backgroundColor: badgeColors[badge] || '#6B655A' }}
               >
                 <Text className="text-espuma text-xs font-semibold">{badge}</Text>
               </View>
@@ -68,7 +68,7 @@ export default function ProdutoCard({ produto, onPress }: Props) {
         <Text className="text-ardosia text-base font-bold" numberOfLines={1}>
           {produto.especie}
         </Text>
-        <Text className="text-mar text-lg font-bold mt-1">
+        <Text className="text-terracota text-lg font-bold mt-1">
           R$ {produto.precoPorKg.toFixed(2)}
           <Text className="text-marinha text-sm font-normal"> /kg</Text>
         </Text>

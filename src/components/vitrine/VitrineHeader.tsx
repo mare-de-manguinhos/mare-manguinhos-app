@@ -19,9 +19,9 @@ export default function VitrineHeader({ buscaTermo, onBuscaChange }: Props) {
 
   return (
     <View
-      className="bg-oceano-vivo px-5 pt-14 pb-6 rounded-b-3xl overflow-hidden"
+      className="bg-oceano px-5 pt-14 pb-6 rounded-b-3xl overflow-hidden"
       style={{
-        shadowColor: '#0EA5A0',
+        shadowColor: '#3A9D8F',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 12,
@@ -37,7 +37,7 @@ export default function VitrineHeader({ buscaTermo, onBuscaChange }: Props) {
         </Text>
         {localizacao && (
           <View className="flex-row items-center">
-            <Ionicons name="location-outline" size={16} color="#F2A23A" />
+            <Ionicons name="location-outline" size={16} color="#E9B84C" />
             <Text className="text-espuma/80 text-sm ml-1.5">{localizacao}</Text>
           </View>
         )}

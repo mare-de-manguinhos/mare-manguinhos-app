@@ -24,9 +24,9 @@ export default function AppInput({
 }: AppInputProps) {
   const [focused, setFocused] = useState(false);
 
-  let borderColor = '#B8D4DC'; // pedra-mar
-  if (focused) borderColor = '#1A5F7A'; // mar
-  if (error) borderColor = '#E05A5A'; // coral
+  let borderColor = '#D6CFC4';
+  if (focused) borderColor = '#D45D4A';
+  if (error) borderColor = '#D64550';
 
   return (
     <View className="mb-4">
@@ -39,7 +39,7 @@ export default function AppInput({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor="#5A7A87"
+          placeholderTextColor="#6B655A"
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}

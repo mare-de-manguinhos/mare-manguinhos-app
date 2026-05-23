@@ -19,12 +19,12 @@ export default function AppButton({
   const baseClasses = 'rounded-xl py-4 items-center justify-center flex-row';
   const variantClasses =
     variant === 'primary'
-      ? 'bg-mar'
+      ? 'bg-terracota'
       : 'bg-espuma border border-pedra-mar';
   const disabledClasses = isDisabled ? 'opacity-50' : 'opacity-100';
 
   const textClasses =
-    variant === 'primary' ? 'text-espuma font-semibold text-base' : 'text-mar font-semibold text-base';
+    variant === 'primary' ? 'text-espuma font-semibold text-base' : 'text-terracota font-semibold text-base';
 
   return (
     <Pressable
@@ -38,7 +38,7 @@ export default function AppButton({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? '#FAFCFD' : '#1A5F7A'}
+          color={variant === 'primary' ? '#FFFCF7' : '#D45D4A'}
           accessibilityLabel="Carregando"
         />
       ) : (
