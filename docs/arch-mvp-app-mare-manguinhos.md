@@ -413,6 +413,7 @@ interface Endereco {
   estado: string;
   cep: string;
   complemento?: string;
+  principal: boolean;
 }
 ```
 

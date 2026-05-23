@@ -119,9 +119,16 @@ export default function RegisterScreen() {
         email: basic.email.trim(),
         telefone: rawPhone(basic.telefone),
         password: basic.password,
+        endereco: {
+          logradouro: address.logradouro.trim(),
+          numero: address.numero.trim(),
+          complemento: address.complemento.trim() || undefined,
+          bairro: address.bairro.trim(),
+          cidade: address.cidade.trim(),
+          estado: address.estado.trim(),
+          cep: rawCEP(address.cep),
+        },
       });
-      // TODO: chamar enderecoService.criar() com dados do endereço
-      // após o cadastro, para persistir o endereço separadamente
       // RootNavigator reage automaticamente ao token no store
     } catch {
       // Mock 409 — e-mail duplicado: retornar para Etapa 1 com erro inline

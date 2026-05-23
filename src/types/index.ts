@@ -70,9 +70,51 @@ export interface DadosCheckout {
 // Interfaces dos Stores (contratos para implementação com Zustand)
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Vitrine Feature Types
+// ---------------------------------------------------------------------------
+
+export interface Banner {
+  titulo: string;
+  subtitulo: string;
+  descricao: string;
+  imagem: string;
+}
+
+export interface ProdutoResumo {
+  id: string;
+  especie: string;
+  foto: string;
+  precoPorKg: number;
+  pesoDisponivel: number;
+  categoria: string;
+  badges?: string[];
+  pescador: {
+    id: string;
+    nome: string;
+  };
+}
+
+export interface CategoriaVitrine {
+  id: string;
+  nome: string;
+}
+
+export interface VitrineData {
+  banner?: Banner;
+  pescadores: Pescador[];
+  categorias: CategoriaVitrine[];
+  produtos: ProdutoResumo[];
+}
+
+// ---------------------------------------------------------------------------
+// Interfaces dos Stores (contratos para implementação com Zustand)
+// ---------------------------------------------------------------------------
+
 export interface AuthStore {
   usuario: Usuario | null;
   token: string | null;
+  enderecoPrincipal: Endereco | null;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
   register: (payload: RegisterPayload) => Promise<void>;
@@ -92,6 +134,7 @@ export interface RegisterPayload {
   email: string;
   telefone: string; // raw digits: "27999999999"
   password: string;
+  endereco?: EnderecoInput;
 }
 
 export interface Endereco {
@@ -104,6 +147,7 @@ export interface Endereco {
   estado: string;
   cep: string;
   complemento?: string;
+  principal: boolean;
 }
 
 export interface EnderecoInput {
@@ -115,6 +159,7 @@ export interface EnderecoInput {
   estado: string;
   cep: string;
   complemento?: string;
+  principal?: boolean;
 }
 
 export interface LoginFormState {
