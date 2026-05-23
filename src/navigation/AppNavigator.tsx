@@ -22,9 +22,9 @@ export default function AppNavigator() {
           backgroundColor: '#FDF6EC',
           borderTopWidth: 1,
           borderTopColor: '#B8D4DC',
-          paddingBottom: 8,
+          paddingBottom: 16,
           paddingTop: 8,
-          height: 60,
+          height: 72,
         },
         tabBarLabelStyle: {
           fontSize: 12,

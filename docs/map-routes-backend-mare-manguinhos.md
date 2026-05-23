@@ -108,9 +108,9 @@
 **O que a tela faz:**
 É a tela inicial do app, estilo home de delivery. Exibe:
 - Banner promocional ("Fresco hoje! Direto do pescador")
-- Seção "Nossos Pescadores" — scroll horizontal com foto, nome e avaliação
+- Seção "Nossos Pescadores" — scroll horizontal com foto, nome (funcionará como um filtro para os produtos listados na mesma tela, ao clicar no pescador mostra apenas produtos desse pescador)
 - Filtros por categoria (Todos, Peixes, Crustáceos)
-- Seção "Disponível agora" — cards de produtos com badges (Hoje, Premium, Favorito)
+- Seção "Disponível agora" — cards de produtos com badges (Hoje, Premium, Favorito...) (interessante dois cards por linha)
 - Barra de busca no topo
 
 **Endpoints:**
@@ -517,14 +517,15 @@
 [
   {
     "id": "uuid",
-  "label": "Casa",
+    "label": "Casa",
     "logradouro": "Rua X",
     "numero": "123",
     "bairro": "Manguinhos",
     "cidade": "Serra",
     "estado": "ES",
     "cep": "29160-000",
-    "complemento": "Apto 101"
+    "complemento": "Apto 101",
+    "principal": true
   }
 ]
 ```
@@ -617,6 +618,7 @@ Para o app funcionar, o backend precisará de pelo menos estas tabelas novas:
 | `estado` | VARCHAR | Estado |
 | `cep` | VARCHAR | CEP |
 | `complemento` | VARCHAR | Apto, sala, etc. |
+| `principal` | BOOLEAN | Endereço principal do consumidor |
 
 ### `pedidos`
 | Coluna | Tipo | Descrição |
