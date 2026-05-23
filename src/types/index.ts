@@ -4,7 +4,9 @@
 
 export type Corte = 'inteiro' | 'limpo' | 'file';
 
-export type StatusPedido = 'confirmado' | 'em_preparo' | 'a_caminho' | 'entregue';
+export type Categoria = 'peixe' | 'crustaceo';
+
+export type StatusPedido = 'confirmado' | 'em_preparo' | 'a_caminho' | 'entregue' | 'cancelado';
 
 export type FormaPagamento = 'pix' | 'cartao';
 
@@ -32,7 +34,9 @@ export interface Produto {
   precoPorKg: number;
   pesoDisponivel: number; // em kg
   cortesDisponiveis: Corte[];
+  badges?: string[];
   pescador: Pescador;
+  categoria: Categoria;
 }
 
 export interface ItemCarrinho {
@@ -58,6 +62,8 @@ export interface DadosCheckout {
   enderecoEntrega: string;
   janelaEntrega: string;
   formaPagamento: FormaPagamento;
+  frete: number;
+  valorTotal: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -86,15 +92,29 @@ export interface RegisterPayload {
   email: string;
   telefone: string; // raw digits: "27999999999"
   password: string;
-  endereco: {
-    cep: string;
-    logradouro: string;
-    numero: string;
-    complemento?: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-  };
+}
+
+export interface Endereco {
+  id: string;
+  label: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  complemento?: string;
+}
+
+export interface EnderecoInput {
+  label?: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  complemento?: string;
 }
 
 export interface LoginFormState {

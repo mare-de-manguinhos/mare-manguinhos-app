@@ -226,7 +226,9 @@ src/
 │   ├── authService.ts
 │   ├── vitrineService.ts
 │   ├── pedidoService.ts
-│   └── pagamentoService.ts
+│   ├── pagamentoService.ts
+│   ├── perfilService.ts
+│   └── freteService.ts
 │
 ├── hooks/                      # lógica reutilizável entre telas
 │   ├── useVitrine.ts
@@ -317,17 +319,27 @@ api.interceptors.request.use((config) => {
 ```
 
 ```typescript
-// services/vitrineService.ts
-export const vitrineService = {
-  listarProdutos: () => api.get<Produto[]>('/produtos'),
-  buscarProduto:  (id: string) => api.get<Produto>(`/produtos/${id}`),
-};
-
 // services/pedidoService.ts
 export const pedidoService = {
   criar:           (dados: DadosCheckout) => api.post<Pedido>('/pedidos', dados),
   buscarStatus:    (id: string) => api.get<Pedido>(`/pedidos/${id}`),
   listarHistorico: () => api.get<Pedido[]>('/pedidos/meus'),
+};
+
+// services/perfilService.ts
+export const perfilService = {
+  buscar:          () => api.get<Usuario>('/api/app/perfil'),
+  atualizar:       (dados: Partial<Pick<Usuario, 'nome' | 'telefone'>>) =>
+    api.put<Usuario>('/api/app/perfil', dados),
+  listarEnderecos: () => api.get<Endereco[]>('/api/app/enderecos'),
+  criarEndereco:   (dados: EnderecoInput) => api.post<Endereco>('/api/app/enderecos', dados),
+  removerEndereco: (id: string) => api.delete(`/api/app/enderecos/${id}`),
+};
+
+// services/freteService.ts
+export const freteService = {
+  calcular: (params: { endereco: string; latitude?: number; longitude?: number }) =>
+    api.post<{ valorFrete: number; prazoEstimadoMinutos: number }>('/api/app/frete/calcular', params),
 };
 ```
 
@@ -340,7 +352,9 @@ export const pedidoService = {
 
 type Corte = 'inteiro' | 'limpo' | 'file';
 
-type StatusPedido = 'confirmado' | 'em_preparo' | 'a_caminho' | 'entregue';
+type Categoria = 'peixe' | 'crustaceo';
+
+type StatusPedido = 'confirmado' | 'em_preparo' | 'a_caminho' | 'entregue' | 'cancelado';
 
 type FormaPagamento = 'pix' | 'cartao';
 
@@ -357,7 +371,9 @@ interface Produto {
   precoPorKg: number;
   pesoDisponivel: number;      // em kg
   cortesDisponiveis: Corte[];
+  badges?: string[];
   pescador: Pescador;
+  categoria: Categoria;
 }
 
 interface ItemCarrinho {
@@ -383,6 +399,20 @@ interface DadosCheckout {
   enderecoEntrega: string;
   janelaEntrega: string;
   formaPagamento: FormaPagamento;
+  frete: number;
+  valorTotal: number;
+}
+
+interface Endereco {
+  id: string;
+  label: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  complemento?: string;
 }
 ```
 

@@ -9,7 +9,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   token: null,
 
   login: async (email: string, senha: string) => {
-    // TODO: substituir mock por authService.login(email, senha)
+    // TODO: substituir mock por authService.login(email, senha) em services/authService.ts
     await new Promise<void>((r) => setTimeout(r, 1500));
     const mockToken = 'mock-jwt-token';
     const mockUsuario = { id: '1', nome: 'Usuário Teste', email, telefone: '' };

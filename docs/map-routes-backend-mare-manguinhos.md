@@ -132,24 +132,18 @@
     {
       "id": "uuid",
       "nome": "Sr. Antônio",
-      "iniciais": "AS",
-      "foto": "https://...",
-      "avaliacao": 4.9,
-      "cor": "#2E7D32"
+      "foto": "https://..."
     },
     {
       "id": "uuid",
       "nome": "D. Marlene",
-      "iniciais": "MC",
-      "foto": "https://...",
-      "avaliacao": 4.8,
-      "cor": "#8D6E63"
+      "foto": "https://..."
     }
   ],
   "categorias": [
     { "id": "todos", "nome": "Todos" },
-    { "id": "peixes", "nome": "Peixes" },
-    { "id": "crustaceos", "nome": "Crustáceos" }
+    { "id": "peixe", "nome": "Peixes" },
+    { "id": "crustaceo", "nome": "Crustáceos" }
   ],
   "produtos": [
     {
@@ -190,7 +184,7 @@
 
 **Query params (opcionais):**
 - `busca` — texto da busca (ex: "robalo", "camarão")
-- `categoria` — filtro por tipo (peixes, crustaceos)
+- `categoria` — filtro por tipo (peixe, crustaceo)
 - `pescador_id` — filtrar por pescador específico
 
 **Retorno (200):**
@@ -648,7 +642,7 @@ Para o app funcionar, o backend precisará de pelo menos estas tabelas novas:
 | `peso_kg` | DECIMAL | Peso solicitado |
 | `preco_unitario` | DECIMAL | Preço por kg no momento |
 
-### `produtos` (ou reaproveitar tabela de estoque existente)
+### `produtos`
 | Coluna | Tipo | Descrição |
 |--------|------|-----------|
 | `id` | UUID | Chave primária |
@@ -658,6 +652,7 @@ Para o app funcionar, o backend precisará de pelo menos estas tabelas novas:
 | `preco_por_kg` | DECIMAL | Preço atual |
 | `peso_disponivel` | DECIMAL | Kg disponíveis |
 | `cortes_disponiveis` | JSON | ["inteiro", "limpo", "file"] |
+| `categoria` | VARCHAR | ["peixe", "crustaceo"] |
 | `atualizado_em` | TIMESTAMP | Última atualização |
 
 ---
