@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,9 @@ import {
   Alert,
   Image,
   Modal,
+  Animated,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
@@ -20,17 +22,26 @@ import { pedidoService } from '../../services/pedidoService';
 import { Endereco, FormaPagamento } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
-import OceanHeader from '../../components/shared/OceanHeader';
+import Chip from '../../components/ui/Chip';
 
 type NavProp = StackNavigationProp<CarrinhoStackParamList, 'Checkout'>;
 
 type TipoEntrega = 'entrega' | 'retirada';
-type Estado = 'carregando' | 'editando' | 'resumo' | 'enviando' | 'erro';
+type Estado = 'editando' | 'enviando';
 
 interface FreteInfo {
   valorFrete: number;
   prazoEstimadoMinutos: number;
 }
+
+const corteLabel: Record<string, string> = {
+  inteiro: 'Inteiro',
+  limpo: 'Limpo',
+  file: 'Filé',
+};
+
+const formatCurrency = (value: number) =>
+  `R$ ${value.toFixed(2).replace('.', ',')}`;
 
 export default function CheckoutScreen() {
   const navigation = useNavigation<NavProp>();
@@ -39,6 +50,7 @@ export default function CheckoutScreen() {
   // Estados principais
   const [estado, setEstado] = useState<Estado>('editando');
   const [tipoEntrega, setTipoEntrega] = useState<TipoEntrega>('entrega');
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
   // Endereços
   const [enderecos, setEnderecos] = useState<Endereco[]>([]);
@@ -59,6 +71,46 @@ export default function CheckoutScreen() {
   });
   const [errosEndereco, setErrosEndereco] = useState<Record<string, string>>({});
   const [salvandoEndereco, setSalvandoEndereco] = useState(false);
+
+  // Animação do modal de endereço
+  const animEndereco = useRef(new Animated.Value(0)).current;
+  const [animandoEndereco, setAnimandoEndereco] = useState(false);
+
+  useEffect(() => {
+    if (mostrarFormularioEndereco) {
+      animEndereco.setValue(0);
+      setAnimandoEndereco(true);
+      Animated.timing(animEndereco, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setAnimandoEndereco(false));
+    }
+  }, [mostrarFormularioEndereco, animEndereco]);
+
+  const handleFecharEndereco = (callback?: () => void) => {
+    if (animandoEndereco) return;
+    setAnimandoEndereco(true);
+    Animated.timing(animEndereco, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      setAnimandoEndereco(false);
+      setMostrarFormularioEndereco(false);
+      if (callback) callback();
+    });
+  };
+
+  const enderecoOverlay = animEndereco.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.5],
+  });
+
+  const enderecoSheetY = animEndereco.interpolate({
+    inputRange: [0, 1],
+    outputRange: [600, 0],
+  });
 
   // Frete
   const [frete, setFrete] = useState<FreteInfo | null>(null);
@@ -83,7 +135,7 @@ export default function CheckoutScreen() {
         setEnderecoSelecionado(resp.data[0].id);
       }
     } catch {
-      Alert.alert('Erro', 'Não foi possível carregar os endereços');
+      setEnderecos([]);
     } finally {
       setCarregandoEnderecos(false);
     }
@@ -183,9 +235,10 @@ export default function CheckoutScreen() {
     try {
       setEstado('enviando');
 
+      const endereco = enderecos.find((e) => e.id === enderecoSelecionado);
       const enderecoEntrega =
-        tipoEntrega === 'entrega'
-          ? `${enderecos.find((e) => e.id === enderecoSelecionado)?.logradouro}, ${enderecos.find((e) => e.id === enderecoSelecionado)?.numero}`
+        tipoEntrega === 'entrega' && endereco
+          ? `${endereco.logradouro}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`
           : 'Retirada no local';
 
       const itemsFormatados = itens.map((item) => ({
@@ -207,16 +260,16 @@ export default function CheckoutScreen() {
         valorTotal,
       });
 
-      // Limpar carrinho
       limpar();
 
-      // Sucesso
-      Alert.alert('Sucesso', `Pedido criado com ID: ${resp.data.id}`, [
+      Alert.alert('Pedido Confirmado!', `Seu pedido #${resp.data.id} foi criado com sucesso.`, [
         {
-          text: 'OK',
+          text: 'Acompanhar Pedido',
           onPress: () => {
-            // TODO: Navegar para tela de acompanhamento se existir
-            navigation.popToTop();
+            navigation.getParent()?.navigate('Pedidos', {
+              screen: 'Acompanhamento',
+              params: { pedidoId: resp.data.id },
+            });
           },
         },
       ]);
@@ -228,14 +281,13 @@ export default function CheckoutScreen() {
 
   if (itens.length === 0) {
     return (
-      <View className="flex-1 bg-areia">
-        <OceanHeader title="Checkout" />
+      <SafeAreaView edges={['top']} className="flex-1 bg-areia">
         <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="cart-outline" size={64} color="#D45D4A" />
-          <Text className="text-ardosia text-xl font-bold mt-4 text-center">
+          <Ionicons name="cart-outline" size={80} color="#6B655A" />
+          <Text className="text-ardosia text-lg font-bold mt-6 text-center">
             Carrinho vazio
           </Text>
-          <Text className="text-marinha text-sm text-center mt-2 mb-6">
+          <Text className="text-marinha text-sm mt-2 text-center mb-6">
             Adicione produtos antes de fazer checkout
           </Text>
           <AppButton
@@ -244,48 +296,57 @@ export default function CheckoutScreen() {
             accessibilityLabel="Voltar"
           />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
     <View className="flex-1 bg-areia">
-      <OceanHeader title="Checkout" />
-
       <ScrollView
         className="flex-1"
-        contentContainerClassName="pb-6"
+        contentContainerStyle={{ paddingBottom: 140 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Itens do Carrinho */}
         <View className="px-4 pt-4">
           <Text className="text-ardosia text-lg font-bold mb-3">Resumo do Pedido</Text>
 
-          {itens.map((item) => (
-            <View
-              key={`${item.produto.id}-${item.corte}`}
-              className="mb-3 p-3 bg-white rounded-lg flex-row items-center border border-pedra-mar"
-            >
-              {item.produto.foto && (
-                <Image
-                  source={{ uri: item.produto.foto }}
-                  className="w-14 h-14 rounded-lg bg-areia mr-3"
-                  resizeMode="cover"
-                />
-              )}
+          {itens.map((item) => {
+            const itemKey = `${item.produto.id}-${item.corte}`;
+            return (
+              <View
+                key={itemKey}
+                className="flex-row items-center rounded-2xl bg-espuma p-3 mb-3 border border-pedra-mar/30"
+                style={{ shadowColor: '#000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 2 }, shadowRadius: 4, elevation: 2 }}
+              >
+                {imageErrors[itemKey] || !item.produto.foto ? (
+                  <View className="w-16 h-16 rounded-xl bg-pedra-mar/20 items-center justify-center mr-3">
+                    <Ionicons name="fish-outline" size={28} color="#6B655A" />
+                  </View>
+                ) : (
+                  <Image
+                    source={{ uri: item.produto.foto }}
+                    className="w-16 h-16 rounded-xl mr-3"
+                    resizeMode="cover"
+                    onError={() => setImageErrors((prev) => ({ ...prev, [itemKey]: true }))}
+                    accessibilityLabel={item.produto.especie}
+                  />
+                )}
 
-              <View className="flex-1">
-                <Text className="text-ardosia font-bold text-base">{item.produto.especie}</Text>
-                <Text className="text-marinha text-sm">
-                  {item.pesoKg} kg - {item.corte}
-                </Text>
+                <View className="flex-1">
+                  <Text className="text-ardosia font-bold text-base" numberOfLines={1}>
+                    {item.produto.especie}
+                  </Text>
+                  <Text className="text-marinha text-sm mt-0.5">
+                    {corteLabel[item.corte] ?? item.corte} &middot; {item.pesoKg.toFixed(1).replace('.', ',')} kg
+                  </Text>
+                  <Text className="text-terracota text-base font-bold mt-1">
+                    {formatCurrency(item.produto.precoPorKg * item.pesoKg)}
+                  </Text>
+                </View>
               </View>
-
-              <Text className="text-terracota font-bold">
-                R$ {(item.produto.precoPorKg * item.pesoKg).toFixed(2)}
-              </Text>
-            </View>
-          ))}
+            );
+          })}
         </View>
 
         {/* Tipo de Entrega */}
@@ -427,26 +488,14 @@ export default function CheckoutScreen() {
           <View className="bg-white rounded-xl p-4 border border-pedra-mar">
             <View className="flex-row flex-wrap gap-3">
               {['09:00-11:00', '12:00-14:00', '14:00-16:00', '16:00-18:00'].map((janela) => (
-                <Pressable
-                  key={janela}
-                  onPress={() => setJanelaTempo(janela)}
-                  className={`flex-1 py-3 rounded-lg border-2 items-center justify-center ${
-                    janelaTempo === janela
-                      ? 'border-terracota bg-terracota/10'
-                      : 'border-pedra-mar'
-                  }`}
-                  accessibilityLabel={`Selecionar horário ${janela}`}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: janelaTempo === janela }}
-                >
-                  <Text
-                    className={`text-base font-semibold ${
-                      janelaTempo === janela ? 'text-terracota' : 'text-ardosia'
-                    }`}
-                  >
-                    {janela}
-                  </Text>
-                </Pressable>
+                <View key={janela} className="w-[48%]">
+                  <Chip
+                    label={janela}
+                    active={janelaTempo === janela}
+                    onPress={() => setJanelaTempo(janela)}
+                    accessibilityLabel={`Selecionar horário ${janela}`}
+                  />
+                </View>
               ))}
             </View>
           </View>
@@ -511,14 +560,14 @@ export default function CheckoutScreen() {
 
           <View className="mb-2 flex-row justify-between">
             <Text className="text-marinha">Subtotal ({itens.length} item{itens.length !== 1 ? 's' : ''})</Text>
-            <Text className="text-ardosia font-bold">R$ {total().toFixed(2)}</Text>
+            <Text className="text-ardosia font-bold">{formatCurrency(total())}</Text>
           </View>
 
           {tipoEntrega === 'entrega' && (
             <View className="mb-2 flex-row justify-between">
               <Text className="text-marinha">Frete</Text>
               <Text className="text-ardosia font-bold">
-                {carregandoFrete ? 'Calculando...' : `R$ ${frete?.valorFrete.toFixed(2) || '0.00'}`}
+                {carregandoFrete ? 'Calculando...' : formatCurrency(frete?.valorFrete ?? 0)}
               </Text>
             </View>
           )}
@@ -526,8 +575,7 @@ export default function CheckoutScreen() {
           <View className="py-3 my-3 border-t border-b border-pedra-mar flex-row justify-between">
             <Text className="text-ardosia text-lg font-bold">Total</Text>
             <Text className="text-terracota text-2xl font-bold">
-              R${' '}
-              {(total() + (tipoEntrega === 'entrega' ? frete?.valorFrete || 0 : 0)).toFixed(2)}
+              {formatCurrency(total() + (tipoEntrega === 'entrega' ? frete?.valorFrete ?? 0 : 0))}
             </Text>
           </View>
 
@@ -553,117 +601,145 @@ export default function CheckoutScreen() {
       {/* Modal de Novo Endereço */}
       <Modal
         visible={mostrarFormularioEndereco}
-        animationType="slide"
-        transparent={false}
+        animationType="none"
+        transparent
+        onRequestClose={() => handleFecharEndereco()}
       >
-        <View className="flex-1 bg-areia">
-          <OceanHeader title="Novo Endereço" />
+        <View className="flex-1 justify-end">
+          <Animated.View
+            className="absolute inset-0 bg-black"
+            style={{ opacity: enderecoOverlay }}
+          />
 
-          <ScrollView
-            className="flex-1"
-            contentContainerClassName="px-4 pt-4 pb-6"
-            showsVerticalScrollIndicator={false}
+          <Animated.View
+            className="bg-espuma rounded-t-3xl overflow-hidden"
+            style={{ height: '85%', transform: [{ translateY: enderecoSheetY }] }}
           >
-            <AppInput
-              label="Label (ex: Casa, Trabalho)"
-              value={novoEndereco.label}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, label: text })}
-              placeholder="Label"
-              error={errosEndereco.label}
-              accessibilityLabel="Label do endereço"
-            />
-
-            <AppInput
-              label="Logradouro"
-              value={novoEndereco.logradouro}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, logradouro: text })}
-              placeholder="Rua, Avenida, etc."
-              error={errosEndereco.logradouro}
-              accessibilityLabel="Logradouro"
-            />
-
-            <AppInput
-              label="Número"
-              value={novoEndereco.numero}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, numero: text })}
-              placeholder="123"
-              error={errosEndereco.numero}
-              accessibilityLabel="Número"
-            />
-
-            <AppInput
-              label="Complemento"
-              value={novoEndereco.complemento}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, complemento: text })}
-              placeholder="Apto 101, Sala 3, etc. (opcional)"
-              accessibilityLabel="Complemento"
-            />
-
-            <AppInput
-              label="Bairro"
-              value={novoEndereco.bairro}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, bairro: text })}
-              placeholder="Bairro"
-              error={errosEndereco.bairro}
-              accessibilityLabel="Bairro"
-            />
-
-            <AppInput
-              label="Cidade"
-              value={novoEndereco.cidade}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cidade: text })}
-              placeholder="Cidade"
-              error={errosEndereco.cidade}
-              accessibilityLabel="Cidade"
-            />
-
-            <AppInput
-              label="Estado"
-              value={novoEndereco.estado}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, estado: text })}
-              placeholder="ES"
-              accessibilityLabel="Estado"
-              error={errosEndereco.estado}
-            />
-
-            <AppInput
-              label="CEP"
-              value={novoEndereco.cep}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cep: text })}
-              placeholder="29160-000"
-              keyboardType="numeric"
-              error={errosEndereco.cep}
-              accessibilityLabel="CEP"
-            />
-
-            <View className="flex-row gap-3 mt-6">
-              <AppButton
-                label="Cancelar"
+            <View className="flex-row items-center justify-between px-5 pt-5 pb-3 border-b border-pedra-mar/30">
+              <Text className="text-ardosia text-xl font-bold">Novo Endereço</Text>
+              <Pressable
                 onPress={() => {
-                  setMostrarFormularioEndereco(false);
-                  setNovoEndereco({
-                    label: '',
-                    logradouro: '',
-                    numero: '',
-                    bairro: '',
-                    cidade: '',
-                    estado: '',
-                    cep: '',
-                    complemento: '',
+                  handleFecharEndereco(() => {
+                    setNovoEndereco({
+                      label: '', logradouro: '', numero: '', bairro: '',
+                      cidade: '', estado: '', cep: '', complemento: '',
+                    });
+                    setErrosEndereco({});
                   });
-                  setErrosEndereco({});
                 }}
-                variant="secondary"
-                accessibilityLabel="Cancelar"
-              />
-              <AppButton
-                label="Salvar"
-                onPress={adicionarEndereco}
-                loading={salvandoEndereco}
-                accessibilityLabel="Salvar endereço"
-              />
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                accessibilityLabel="Fechar"
+                accessibilityRole="button"
+              >
+                <Ionicons name="close-outline" size={24} color="#2C241E" />
+              </Pressable>
             </View>
-          </ScrollView>
+
+            <ScrollView
+              className="flex-1 px-5 pt-4"
+              contentContainerStyle={{ paddingBottom: 48 }}
+              showsVerticalScrollIndicator={false}
+            >
+              <AppInput
+                label="Label (ex: Casa, Trabalho)"
+                value={novoEndereco.label}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, label: text })}
+                placeholder="Label"
+                error={errosEndereco.label}
+                accessibilityLabel="Label do endereço"
+              />
+
+              <AppInput
+                label="Logradouro"
+                value={novoEndereco.logradouro}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, logradouro: text })}
+                placeholder="Rua, Avenida, etc."
+                error={errosEndereco.logradouro}
+                accessibilityLabel="Logradouro"
+              />
+
+              <AppInput
+                label="Número"
+                value={novoEndereco.numero}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, numero: text })}
+                placeholder="123"
+                error={errosEndereco.numero}
+                accessibilityLabel="Número"
+              />
+
+              <AppInput
+                label="Complemento"
+                value={novoEndereco.complemento}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, complemento: text })}
+                placeholder="Apto 101, Sala 3, etc. (opcional)"
+                accessibilityLabel="Complemento"
+              />
+
+              <AppInput
+                label="Bairro"
+                value={novoEndereco.bairro}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, bairro: text })}
+                placeholder="Bairro"
+                error={errosEndereco.bairro}
+                accessibilityLabel="Bairro"
+              />
+
+              <AppInput
+                label="Cidade"
+                value={novoEndereco.cidade}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cidade: text })}
+                placeholder="Cidade"
+                error={errosEndereco.cidade}
+                accessibilityLabel="Cidade"
+              />
+
+              <AppInput
+                label="Estado"
+                value={novoEndereco.estado}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, estado: text })}
+                placeholder="ES"
+                accessibilityLabel="Estado"
+                error={errosEndereco.estado}
+              />
+
+              <AppInput
+                label="CEP"
+                value={novoEndereco.cep}
+                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cep: text })}
+                placeholder="29160-000"
+                keyboardType="numeric"
+                error={errosEndereco.cep}
+                accessibilityLabel="CEP"
+              />
+
+              <View className="flex-row gap-3 mt-4">
+                <View className="flex-1">
+                  <AppButton
+                    label="Cancelar"
+                    onPress={() => {
+                      handleFecharEndereco(() => {
+                        setNovoEndereco({
+                          label: '', logradouro: '', numero: '', bairro: '',
+                          cidade: '', estado: '', cep: '', complemento: '',
+                        });
+                        setErrosEndereco({});
+                      });
+                    }}
+                    variant="secondary"
+                    accessibilityLabel="Cancelar"
+                  />
+                </View>
+                <View className="flex-1">
+                  <AppButton
+                    label="Salvar"
+                    onPress={adicionarEndereco}
+                    loading={salvandoEndereco}
+                    accessibilityLabel="Salvar endereço"
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </Animated.View>
         </View>
       </Modal>
     </View>

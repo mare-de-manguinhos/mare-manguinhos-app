@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable, Modal, ScrollView, TextInput, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Pressable, Modal, ScrollView, TextInput, Image, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Pescador } from '../../types';
 
@@ -13,24 +13,69 @@ interface Props {
 
 export default function PescadoresModal({ visible, pescadores, selectedId, onSelect, onClose }: Props) {
   const [busca, setBusca] = useState('');
+  const animValue = useRef(new Animated.Value(0)).current;
+  const [animando, setAnimando] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      animValue.setValue(0);
+      setAnimando(true);
+      Animated.timing(animValue, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setAnimando(false));
+    }
+  }, [visible, animValue]);
+
+  const handleClose = () => {
+    if (animando) return;
+    setAnimando(true);
+    Animated.timing(animValue, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      setAnimando(false);
+      onClose();
+    });
+  };
+
+  const handleSelect = (id: string) => {
+    onSelect(id);
+    handleClose();
+  };
 
   const filtrados = busca.length >= 2
     ? pescadores.filter((p) => p.nome.toLowerCase().includes(busca.toLowerCase()))
     : pescadores;
 
-  const handleSelect = (id: string) => {
-    onSelect(id);
-    onClose();
-  };
+  const overlayOpacity = animValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.5],
+  });
+
+  const sheetTranslateY = animValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [600, 0],
+  });
 
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View className="flex-1 bg-black/50 justify-end">
-        <View className="bg-espuma rounded-t-3xl max-h-[80%] min-h-[50%]">
+    <Modal visible={visible} animationType="none" transparent onRequestClose={handleClose}>
+      <View className="flex-1 justify-end">
+        <Animated.View
+          className="absolute inset-0 bg-black"
+          style={{ opacity: overlayOpacity }}
+        />
+
+        <Animated.View
+          className="bg-espuma rounded-t-3xl max-h-[80%] min-h-[50%]"
+          style={{ transform: [{ translateY: sheetTranslateY }] }}
+        >
           <View className="flex-row items-center justify-between px-5 pt-5 pb-3 border-b border-pedra-mar/30">
             <Text className="text-ardosia text-xl font-bold">Todos os Pescadores</Text>
             <Pressable
-              onPress={onClose}
+              onPress={handleClose}
               accessibilityLabel="Fechar"
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
@@ -92,7 +137,7 @@ export default function PescadoresModal({ visible, pescadores, selectedId, onSel
               ))
             )}
           </ScrollView>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
