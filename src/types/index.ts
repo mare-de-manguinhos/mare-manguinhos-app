@@ -25,6 +25,7 @@ export interface Pescador {
   id: string;
   nome: string;
   foto: string;
+  telefone?: string;
 }
 
 export interface Produto {
