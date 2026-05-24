@@ -37,6 +37,7 @@ export interface Produto {
   badges?: string[];
   pescador: Pescador;
   categoria: Categoria;
+  descricao?: string;
 }
 
 export interface ItemCarrinho {
