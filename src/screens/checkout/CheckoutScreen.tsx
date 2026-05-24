@@ -18,7 +18,7 @@ import type { CarrinhoStackParamList } from '../../navigation/types';
 import { useCarrinhoStore } from '../../store/carrinhoStore';
 import { perfilService } from '../../services/perfilService';
 import { freteService } from '../../services/freteService';
-import { pedidoService } from '../../services/pedidoService';
+import { usePedidoStore } from '../../store/pedidoStore';
 import { Endereco, FormaPagamento } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
@@ -45,7 +45,8 @@ const formatCurrency = (value: number) =>
 
 export default function CheckoutScreen() {
   const navigation = useNavigation<NavProp>();
-  const { itens, total, limpar } = useCarrinhoStore();
+  const { itens, total } = useCarrinhoStore();
+  const { fazerPedido } = usePedidoStore();
 
   // Estados principais
   const [estado, setEstado] = useState<Estado>('editando');
@@ -251,7 +252,7 @@ export default function CheckoutScreen() {
       const freteValue = tipoEntrega === 'entrega' ? frete!.valorFrete : 0;
       const valorTotal = subtotal + freteValue;
 
-      const resp = await pedidoService.criar({
+      await fazerPedido({
         itens: itemsFormatados,
         enderecoEntrega,
         janelaEntrega: janelaTempo,
@@ -260,15 +261,15 @@ export default function CheckoutScreen() {
         valorTotal,
       });
 
-      limpar();
+      const { pedidoAtivo } = usePedidoStore.getState();
 
-      Alert.alert('Pedido Confirmado!', `Seu pedido #${resp.data.id} foi criado com sucesso.`, [
+      Alert.alert('Pedido Confirmado!', `Seu pedido #${pedidoAtivo?.id} foi criado com sucesso.`, [
         {
           text: 'Acompanhar Pedido',
           onPress: () => {
             navigation.getParent()?.navigate('Pedidos', {
               screen: 'Acompanhamento',
-              params: { pedidoId: resp.data.id },
+              params: { pedidoId: pedidoAtivo?.id },
             });
           },
         },
