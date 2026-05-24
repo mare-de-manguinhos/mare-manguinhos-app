@@ -2,11 +2,15 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 interface StepIndicatorProps {
-  readonly currentStep: 1 | 2;
-  readonly totalSteps: 2;
+  readonly currentStep: number;
+  readonly totalSteps: number;
   readonly labels: string[];
 }
 
+/**
+ * Indicador de etapas para acompanhamento de pedidos.
+ * Renderiza uma linha de tempo com círculos numerados e rótulos descritivos.
+ */
 export default function StepIndicator({
   currentStep,
   totalSteps,
@@ -14,7 +18,7 @@ export default function StepIndicator({
 }: Readonly<StepIndicatorProps>) {
   return (
     <View
-      className="flex-row items-center justify-center my-4 px-8"
+      className="flex-row items-center justify-center my-4 px-4"
       accessibilityLabel={`Etapa ${currentStep} de ${totalSteps}`}
     >
       {Array.from({ length: totalSteps }).map((_, index) => {
@@ -28,25 +32,37 @@ export default function StepIndicator({
           : 'bg-pedra-mar';
         const textClasses = isActive || isCompleted
           ? 'text-espuma'
-          : 'text-ardosia';
+          : 'text-marinha';
 
         return (
           <React.Fragment key={stepNumber}>
-            <View className="items-center">
+            <View className="items-center flex-1">
+              {/* Círculo do Passo */}
               <View
-                className={`w-9 h-9 rounded-full items-center justify-center ${circleClasses}`}
+                className={`w-8 h-8 rounded-full items-center justify-center ${circleClasses}`}
               >
-                <Text className={`font-bold text-sm ${textClasses}`}>
+                <Text className={`font-bold text-xs ${textClasses}`}>
                   {stepNumber}
                 </Text>
               </View>
-              <Text className="text-marinha text-xs mt-1 text-center">
-                {labels[index] ?? ''}
-              </Text>
+              
+              {/* Rótulo do Passo */}
+              <View className="h-10 justify-center">
+                <Text 
+                  className={`text-[10px] mt-1 text-center font-medium leading-tight ${
+                    isActive ? 'text-ardosia' : 'text-marinha'
+                  }`}
+                  numberOfLines={2}
+                >
+                  {labels[index] ?? ''}
+                </Text>
+              </View>
             </View>
+            
+            {/* Linha Conectora */}
             {!isLast && (
               <View
-                className={`flex-1 h-0.5 mx-2 mb-4 ${
+                className={`flex-1 h-0.5 mb-10 ${
                   isCompleted ? 'bg-terracota' : 'bg-pedra-mar'
                 }`}
               />

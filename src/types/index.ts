@@ -226,7 +226,7 @@ export interface AppButtonProps {
   readonly onPress: () => void;
   readonly loading?: boolean;
   readonly disabled?: boolean;
-  readonly variant?: 'primary' | 'secondary';
+  readonly variant?: 'primary' | 'secondary' | 'outline';
   readonly accessibilityLabel: string;
 }
 
