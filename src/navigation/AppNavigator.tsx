@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppTabParamList } from './types';
 import TabIcon from '../components/shared/TabIcon';
 import VitrineStack from './VitrineStack';
-import CarrinhoScreen from '../screens/carrinho/CarrinhoScreen';
+import CarrinhoStack from './CarrinhoStack';
 import PedidosStack from './PedidosStack';
 import PerfilScreen from '../screens/perfil/PerfilScreen';
 
@@ -34,7 +34,7 @@ export default function AppNavigator() {
       })}
     >
       <Tab.Screen name="Vitrine" component={VitrineStack} />
-      <Tab.Screen name="Carrinho" component={CarrinhoScreen} />
+      <Tab.Screen name="Carrinho" component={CarrinhoStack} />
       <Tab.Screen name="Pedidos" component={PedidosStack} />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
