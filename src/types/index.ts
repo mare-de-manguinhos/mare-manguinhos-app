@@ -58,8 +58,14 @@ export interface Pedido {
   criadoEm: string;
 }
 
+export interface ItemPedidoInput {
+  produtoId: string;
+  corte: Corte;
+  pesoKg: number;
+}
+
 export interface DadosCheckout {
-  itens: ItemCarrinho[];
+  itens: ItemPedidoInput[];
   enderecoEntrega: string;
   janelaEntrega: string;
   formaPagamento: FormaPagamento;
@@ -260,3 +266,5 @@ export interface PedidoStore {
   fazerPedido: (checkout: DadosCheckout) => Promise<void>;
   atualizarStatus: (pedidoId: string) => Promise<void>;
 }
+
+

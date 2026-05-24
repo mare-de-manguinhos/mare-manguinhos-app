@@ -10,6 +10,11 @@ export type VitrineStackParamList = {
   Produto: { produtoId: string };
 };
 
+export type CarrinhoStackParamList = {
+  CarrinhoLista: undefined;
+  Checkout: undefined;
+};
+
 export type PedidosStackParamList = {
   Historico: undefined;
   Acompanhamento: { pedidoId: string };
