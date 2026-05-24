@@ -249,7 +249,7 @@ export interface AppInputProps {
 export interface CarrinhoStore {
   itens: ItemCarrinho[];
   adicionarItem: (produto: Produto, corte: Corte, pesoKg: number) => void;
-  removerItem: (produtoId: string) => void;
+  removerItem: (produtoId: string, corte: Corte) => void;
   limpar: () => void;
   total: () => number;
 }
