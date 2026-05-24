@@ -374,6 +374,7 @@ interface Produto {
   badges?: string[];
   pescador: Pescador;
   categoria: Categoria;
+  descricao?: string;          // opcional — presente no detail endpoint
 }
 
 interface ItemCarrinho {

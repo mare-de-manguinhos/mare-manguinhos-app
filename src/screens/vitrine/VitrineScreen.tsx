@@ -14,7 +14,7 @@ import { vitrineService } from '../../services/vitrineService';
 import type { VitrineStackParamList } from '../../navigation/types';
 import VitrineBanner from '../../components/vitrine/VitrineBanner';
 import PescadorCard from '../../components/vitrine/PescadorCard';
-import CategoriaChip from '../../components/vitrine/CategoriaChip';
+import Chip from '../../components/ui/Chip';
 import ProdutoCard from '../../components/vitrine/ProdutoCard';
 import VitrineHeader from '../../components/vitrine/VitrineHeader';
 import PescadoresModal from '../../components/vitrine/PescadoresModal';
@@ -188,14 +188,15 @@ export default function VitrineScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerClassName="px-4"
+            contentContainerClassName="px-4 gap-2"
           >
             {dados.categorias.map((c) => (
-              <CategoriaChip
+              <Chip
                 key={c.id}
-                categoria={c}
+                label={c.nome}
                 active={categoriaId === c.id}
                 onPress={() => setCategoriaId(c.id)}
+                accessibilityLabel={`Filtrar por ${c.nome}`}
               />
             ))}
           </ScrollView>

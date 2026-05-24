@@ -1,11 +1,11 @@
-import { VitrineData } from '../types';
+import { VitrineData, Produto } from '../types';
 
 export const vitrineDataMock: VitrineData = {
   banner: {
     titulo: 'Fresco hoje!',
     subtitulo: 'Direto do pescador',
     descricao: 'Capturado esta manhã em Manguinhos',
-    imagem: 'https://picsum.photos/seed/banner-peixe/800/400',
+    imagem: 'https://loremflickr.com/800/400/fishmonger,fish,store?seed=banner',
   },
   pescadores: [
     { id: 'pesc-001', nome: 'Sr. Antônio', foto: 'https://i.pravatar.cc/100?u=antonio' },
@@ -33,7 +33,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-001',
       especie: 'Robalo',
-      foto: 'https://picsum.photos/seed/robalo/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=robalo',
       precoPorKg: 45.0,
       pesoDisponivel: 12.5,
       categoria: 'peixe',
@@ -43,7 +43,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-002',
       especie: 'Camarão Rosa',
-      foto: 'https://picsum.photos/seed/camarao/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=camarao',
       precoPorKg: 65.0,
       pesoDisponivel: 5.0,
       categoria: 'crustaceo',
@@ -53,7 +53,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-003',
       especie: 'Tilápia',
-      foto: 'https://picsum.photos/seed/tilapia/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=tilapia',
       precoPorKg: 32.0,
       pesoDisponivel: 20.0,
       categoria: 'peixe',
@@ -63,7 +63,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-004',
       especie: 'Siri Mole',
-      foto: 'https://picsum.photos/seed/siri/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=siri',
       precoPorKg: 55.0,
       pesoDisponivel: 3.5,
       categoria: 'crustaceo',
@@ -73,7 +73,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-005',
       especie: 'Corvina',
-      foto: 'https://picsum.photos/seed/corvina/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=corvina',
       precoPorKg: 38.0,
       pesoDisponivel: 8.0,
       categoria: 'peixe',
@@ -83,7 +83,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-006',
       especie: 'Lagosta',
-      foto: 'https://picsum.photos/seed/lagosta/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=lagosta',
       precoPorKg: 85.0,
       pesoDisponivel: 2.0,
       categoria: 'crustaceo',
@@ -93,7 +93,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-007',
       especie: 'Pargo',
-      foto: 'https://picsum.photos/seed/pargo/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=pargo',
       precoPorKg: 42.0,
       pesoDisponivel: 6.0,
       categoria: 'peixe',
@@ -103,7 +103,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-008',
       especie: 'Vermelho',
-      foto: 'https://picsum.photos/seed/vermelho/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=vermelho',
       precoPorKg: 48.0,
       pesoDisponivel: 4.0,
       categoria: 'peixe',
@@ -113,7 +113,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-009',
       especie: 'Sardinha',
-      foto: 'https://picsum.photos/seed/sardinha/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=sardinha',
       precoPorKg: 18.0,
       pesoDisponivel: 30.0,
       categoria: 'peixe',
@@ -123,7 +123,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-010',
       especie: 'Caranguejo Uçá',
-      foto: 'https://picsum.photos/seed/caranguejo/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=caranguejo',
       precoPorKg: 35.0,
       pesoDisponivel: 8.0,
       categoria: 'crustaceo',
@@ -133,7 +133,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-011',
       especie: 'Ostra',
-      foto: 'https://picsum.photos/seed/ostra/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=ostra',
       precoPorKg: 52.0,
       pesoDisponivel: 3.0,
       categoria: 'crustaceo',
@@ -143,7 +143,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-012',
       especie: 'Dourado',
-      foto: 'https://picsum.photos/seed/dourado/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=dourado',
       precoPorKg: 40.0,
       pesoDisponivel: 7.0,
       categoria: 'peixe',
@@ -153,7 +153,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-013',
       especie: 'Anchova',
-      foto: 'https://picsum.photos/seed/anchova/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=anchova',
       precoPorKg: 36.0,
       pesoDisponivel: 5.5,
       categoria: 'peixe',
@@ -163,7 +163,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-014',
       especie: 'Lula',
-      foto: 'https://picsum.photos/seed/lula/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=lula',
       precoPorKg: 58.0,
       pesoDisponivel: 4.0,
       categoria: 'crustaceo',
@@ -173,7 +173,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-015',
       especie: 'Polvo',
-      foto: 'https://picsum.photos/seed/polvo/400/300',
+      foto: 'https://loremflickr.com/400/300/crab?seed=polvo',
       precoPorKg: 62.0,
       pesoDisponivel: 3.0,
       categoria: 'crustaceo',
@@ -183,7 +183,7 @@ export const vitrineDataMock: VitrineData = {
     {
       id: 'prod-016',
       especie: 'Tainha',
-      foto: 'https://picsum.photos/seed/tainha/400/300',
+      foto: 'https://loremflickr.com/400/300/seafood?seed=tainha',
       precoPorKg: 28.0,
       pesoDisponivel: 10.0,
       categoria: 'peixe',
@@ -192,3 +192,25 @@ export const vitrineDataMock: VitrineData = {
     },
   ],
 };
+
+export function gerarProdutoDetalhado(id: string): Produto | null {
+  const resumo = vitrineDataMock.produtos.find(p => p.id === id);
+  if (!resumo) return null;
+
+  return {
+    id: resumo.id,
+    especie: resumo.especie,
+    foto: resumo.foto,
+    precoPorKg: resumo.precoPorKg,
+    pesoDisponivel: resumo.pesoDisponivel,
+    cortesDisponiveis: ['inteiro', 'limpo', 'file'],
+    badges: resumo.badges,
+    pescador: {
+      id: resumo.pescador.id,
+      nome: resumo.pescador.nome,
+      foto: `https://i.pravatar.cc/150?u=${resumo.pescador.id}`,
+    },
+    categoria: resumo.categoria as 'peixe' | 'crustaceo',
+    descricao: `${resumo.especie} fresco, direto do pescador de Manguinhos. Produto de alta qualidade.`,
+  };
+}
