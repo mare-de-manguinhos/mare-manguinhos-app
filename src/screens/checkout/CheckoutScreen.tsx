@@ -14,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { CarrinhoStackParamList } from '../../navigation/types';
 import { useCarrinhoStore } from '../../store/carrinhoStore';
-import { useAuthStore } from '../../store/authStore';
 import { perfilService } from '../../services/perfilService';
 import { freteService } from '../../services/freteService';
 import { pedidoService } from '../../services/pedidoService';
@@ -36,7 +35,6 @@ interface FreteInfo {
 export default function CheckoutScreen() {
   const navigation = useNavigation<NavProp>();
   const { itens, total, limpar } = useCarrinhoStore();
-  const { token } = useAuthStore();
 
   // Estados principais
   const [estado, setEstado] = useState<Estado>('editando');
@@ -265,7 +263,7 @@ export default function CheckoutScreen() {
 
           {itens.map((item) => (
             <View
-              key={item.produto.id}
+              key={`${item.produto.id}-${item.corte}`}
               className="mb-3 p-3 bg-white rounded-lg flex-row items-center border border-pedra-mar"
             >
               {item.produto.foto && (
