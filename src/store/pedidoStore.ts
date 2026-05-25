@@ -6,16 +6,36 @@ import { useCarrinhoStore } from './carrinhoStore';
 export const usePedidoStore = create<PedidoStore>((set) => ({
   pedidoAtivo: null,
   historico: [],
+  loading: false,
 
   fazerPedido: async (checkout: DadosCheckout) => {
-    const resp = await pedidoService.criar(checkout);
-    const pedido = resp.data;
-    set({ pedidoAtivo: pedido });
-    useCarrinhoStore.getState().limpar();
+    set({ loading: true });
+    try {
+      const resp = await pedidoService.criar(checkout);
+      set({ pedidoAtivo: resp.data });
+      useCarrinhoStore.getState().limpar();
+    } finally {
+      set({ loading: false });
+    }
   },
 
   atualizarStatus: async (pedidoId: string) => {
-    const resp = await pedidoService.buscarStatus(pedidoId);
-    set({ pedidoAtivo: resp.data });
+    set({ loading: true });
+    try {
+      const resp = await pedidoService.buscarStatus(pedidoId);
+      set({ pedidoAtivo: resp.data });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  listarHistorico: async () => {
+    set({ loading: true });
+    try {
+      const resp = await pedidoService.listarHistorico();
+      set({ historico: resp.data.pedidos });
+    } finally {
+      set({ loading: false });
+    }
   },
 }));

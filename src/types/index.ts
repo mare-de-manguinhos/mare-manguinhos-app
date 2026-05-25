@@ -25,6 +25,7 @@ export interface Pescador {
   id: string;
   nome: string;
   foto: string;
+  telefone?: string;
 }
 
 export interface Produto {
@@ -232,7 +233,7 @@ export interface AppButtonProps {
   readonly onPress: () => void;
   readonly loading?: boolean;
   readonly disabled?: boolean;
-  readonly variant?: 'primary' | 'secondary';
+  readonly variant?: 'primary' | 'secondary' | 'outline';
   readonly accessibilityLabel: string;
 }
 
@@ -263,8 +264,10 @@ export interface CarrinhoStore {
 export interface PedidoStore {
   pedidoAtivo: Pedido | null;
   historico: Pedido[];
+  loading: boolean;
   fazerPedido: (checkout: DadosCheckout) => Promise<void>;
   atualizarStatus: (pedidoId: string) => Promise<void>;
+  listarHistorico: () => Promise<void>;
 }
 
 

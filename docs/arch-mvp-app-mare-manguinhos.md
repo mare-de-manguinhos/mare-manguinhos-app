@@ -362,6 +362,7 @@ interface Pescador {
   id: string;
   nome: string;
   foto: string;
+  telefone?: string;
 }
 
 interface Produto {

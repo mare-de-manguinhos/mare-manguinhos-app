@@ -132,12 +132,14 @@
     {
       "id": "uuid",
       "nome": "Sr. Antônio",
-      "foto": "https://..."
+      "foto": "https://...",
+      "telefone": "(27) 99999-9991"
     },
     {
       "id": "uuid",
       "nome": "D. Marlene",
-      "foto": "https://..."
+      "foto": "https://...",
+      "telefone": "(27) 99999-9992"
     }
   ],
   "categorias": [
@@ -201,7 +203,8 @@
     "pescador": {
       "id": "uuid",
       "nome": "Sr. Antônio",
-      "foto": "https://..."
+      "foto": "https://...",
+      "telefone": "(27) 99999-9991"
     }
   }
 ]
@@ -232,12 +235,13 @@
   "precoPorKg": 45.00,
   "pesoDisponivel": 12.5,
   "cortesDisponiveis": ["inteiro", "limpo", "file"],
-  "pescador": {
-    "id": "uuid",
-    "nome": "Seu José",
-    "foto": "https://..."
-  },
-  "descricao": "Peixe pescado hoje pela manhã em Manguinhos"
+    "pescador": {
+      "id": "uuid",
+      "nome": "Seu José",
+      "foto": "https://...",
+      "telefone": "(27) 99999-9993"
+    },
+    "descricao": "Peixe pescado hoje pela manhã em Manguinhos"
 }
 ```
 

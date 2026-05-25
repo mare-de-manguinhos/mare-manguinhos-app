@@ -10,7 +10,7 @@ const Stack = createStackNavigator<PedidosStackParamList>();
 export default function PedidosStack() {
   return (
     <Stack.Navigator screenOptions={defaultStackOptions}>
-      <Stack.Screen name="Historico" component={HistoricoScreen} />
+      <Stack.Screen name="Historico" component={HistoricoScreen} options={{ title: 'Meus Pedidos' }} />
       <Stack.Screen name="Acompanhamento" component={AcompanhamentoScreen} options={{ title: 'Acompanhamento' }} />
     </Stack.Navigator>
   );

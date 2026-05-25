@@ -1,12 +1,24 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface OceanHeaderProps {
   readonly title?: string;
   readonly subtitle?: string;
+  readonly showBackButton?: boolean;
+  readonly onBackPress?: () => void;
 }
 
-export default function OceanHeader({ title, subtitle }: OceanHeaderProps) {
+/**
+ * Cabeçalho compartilhado para telas principais e de detalhes.
+ * Exibe o logo, título, subtítulo e opcionalmente um botão de voltar.
+ */
+export default function OceanHeader({
+  title,
+  subtitle,
+  showBackButton = false,
+  onBackPress,
+}: OceanHeaderProps) {
   return (
     <View
       className="bg-terracota items-center px-6"
@@ -23,16 +35,25 @@ export default function OceanHeader({ title, subtitle }: OceanHeaderProps) {
       }}
       accessibilityLabel="Cabeçalho decorativo do Maré de Manguinhos"
     >
-      {/* Círculo decorativo atrás do logo */}
-      <View
-        className="bg-terracota-escuro items-center justify-center mb-3"
-      />
+      {showBackButton && (
+        <TouchableOpacity
+          onPress={onBackPress}
+          className="absolute left-6 top-14 z-10 p-2"
+          accessibilityLabel="Voltar"
+          accessibilityRole="button"
+        >
+          <Ionicons name="chevron-back" size={28} color="#FFFCF7" />
+        </TouchableOpacity>
+      )}
+
+      {/* Logo Centralizado */}
       <Image
         source={require('../../../assets/Logo.png')}
         style={{ width: 84, height: 84, zIndex: 1 }}
         accessibilityLabel="Logo do Maré de Manguinhos"
         resizeMode="contain"
       />
+      
       {title ? (
         <Text
           className="text-espuma font-bold mt-4"
@@ -41,8 +62,11 @@ export default function OceanHeader({ title, subtitle }: OceanHeaderProps) {
           {title}
         </Text>
       ) : null}
+      
       {subtitle ? (
-        <Text className="text-pedra-mar text-sm mt-1 text-center">{subtitle}</Text>
+        <Text className="text-pedra-mar text-sm mt-1 text-center">
+          {subtitle}
+        </Text>
       ) : null}
     </View>
   );

@@ -17,14 +17,22 @@ export default function AppButton({
   const isDisabled = disabled || loading;
 
   const baseClasses = 'rounded-xl py-4 items-center justify-center flex-row';
-  const variantClasses =
-    variant === 'primary'
-      ? 'bg-terracota'
-      : 'bg-espuma border border-pedra-mar';
-  const disabledClasses = isDisabled ? 'opacity-50' : 'opacity-100';
+  
+  let variantClasses = 'bg-terracota';
+  let textClasses = 'text-espuma font-semibold text-base';
+  let loaderColor = '#FFFCF7';
 
-  const textClasses =
-    variant === 'primary' ? 'text-espuma font-semibold text-base' : 'text-terracota font-semibold text-base';
+  if (variant === 'secondary') {
+    variantClasses = 'bg-espuma border border-pedra-mar';
+    textClasses = 'text-terracota font-semibold text-base';
+    loaderColor = '#D45D4A';
+  } else if (variant === 'outline') {
+    variantClasses = 'bg-transparent border border-terracota';
+    textClasses = 'text-terracota font-semibold text-base';
+    loaderColor = '#D45D4A';
+  }
+
+  const disabledClasses = isDisabled ? 'opacity-50' : 'opacity-100';
 
   return (
     <Pressable
@@ -38,7 +46,7 @@ export default function AppButton({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? '#FFFCF7' : '#D45D4A'}
+          color={loaderColor}
           accessibilityLabel="Carregando"
         />
       ) : (
