@@ -19,6 +19,7 @@ import { useCarrinhoStore } from '../../store/carrinhoStore';
 import { perfilService } from '../../services/perfilService';
 import { freteService } from '../../services/freteService';
 import { usePedidoStore } from '../../store/pedidoStore';
+import { USE_MOCK } from '../../services/pedidoService';
 import { Endereco, FormaPagamento } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
@@ -222,6 +223,14 @@ export default function CheckoutScreen() {
   };
 
   const finalizarPedido = async () => {
+    if (USE_MOCK) {
+      Alert.alert(
+        'Indisponível',
+        'O checkout será ativado quando o backend estiver disponível.'
+      );
+      return;
+    }
+
     // Validações
     if (tipoEntrega === 'entrega' && !enderecoSelecionado) {
       Alert.alert('Erro', 'Selecione um endereço de entrega');
@@ -269,6 +278,7 @@ export default function CheckoutScreen() {
           onPress: () => {
             navigation.getParent()?.navigate('Pedidos', {
               screen: 'Acompanhamento',
+              initial: false,
               params: { pedidoId: pedidoAtivo?.id },
             });
           },

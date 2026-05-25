@@ -2,7 +2,7 @@ import api from './api';
 import { Pedido, DadosCheckout } from '../types';
 import { pedidosMock, buscarPedidoMock, criarPedidoMock } from './pedidoDataMock';
 
-const USE_MOCK = true;
+export const USE_MOCK = true;
 
 export const pedidoService = {
   criar: async (dados: DadosCheckout): Promise<{ data: Pedido }> => {
