@@ -3,13 +3,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppTabParamList } from './types';
 import TabIcon from '../components/shared/TabIcon';
 import VitrineStack from './VitrineStack';
-import CarrinhoScreen from '../screens/carrinho/CarrinhoScreen';
+import CarrinhoStack from './CarrinhoStack';
 import PedidosStack from './PedidosStack';
 import PerfilScreen from '../screens/perfil/PerfilScreen';
+import { useCarrinhoStore } from '../store/carrinhoStore';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
 export default function AppNavigator() {
+  const badgeCount = useCarrinhoStore((s) => s.itens.length);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -34,7 +37,11 @@ export default function AppNavigator() {
       })}
     >
       <Tab.Screen name="Vitrine" component={VitrineStack} />
-      <Tab.Screen name="Carrinho" component={CarrinhoScreen} />
+      <Tab.Screen
+        name="Carrinho"
+        component={CarrinhoStack}
+        options={{ tabBarBadge: badgeCount > 0 ? badgeCount : undefined }}
+      />
       <Tab.Screen name="Pedidos" component={PedidosStack} />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>

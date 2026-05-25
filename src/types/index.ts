@@ -59,8 +59,14 @@ export interface Pedido {
   criadoEm: string;
 }
 
+export interface ItemPedidoInput {
+  produtoId: string;
+  corte: Corte;
+  pesoKg: number;
+}
+
 export interface DadosCheckout {
-  itens: ItemCarrinho[];
+  itens: ItemPedidoInput[];
   enderecoEntrega: string;
   janelaEntrega: string;
   formaPagamento: FormaPagamento;
@@ -250,7 +256,7 @@ export interface AppInputProps {
 export interface CarrinhoStore {
   itens: ItemCarrinho[];
   adicionarItem: (produto: Produto, corte: Corte, pesoKg: number) => void;
-  removerItem: (produtoId: string) => void;
+  removerItem: (produtoId: string, corte: Corte) => void;
   limpar: () => void;
   total: () => number;
 }
@@ -258,6 +264,10 @@ export interface CarrinhoStore {
 export interface PedidoStore {
   pedidoAtivo: Pedido | null;
   historico: Pedido[];
+  loading: boolean;
   fazerPedido: (checkout: DadosCheckout) => Promise<void>;
   atualizarStatus: (pedidoId: string) => Promise<void>;
+  listarHistorico: () => Promise<void>;
 }
+
+

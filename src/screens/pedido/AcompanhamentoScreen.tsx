@@ -32,16 +32,16 @@ export default function AcompanhamentoScreen() {
   const route = useRoute<AcompanhamentoRouteProp>();
   const { pedidoId } = route.params;
 
-  const { pedidoAtivo: pedido, loading, buscarStatus } = usePedidoStore();
+  const { pedidoAtivo: pedido, loading, atualizarStatus } = usePedidoStore();
 
   const carregarDados = useCallback(async () => {
     try {
-      await buscarStatus(pedidoId);
+      await atualizarStatus(pedidoId);
     } catch (error) {
       console.error('Erro ao buscar status do pedido:', error);
       Alert.alert('Erro', 'Não foi possível carregar os detalhes do pedido.');
     }
-  }, [pedidoId, buscarStatus]);
+  }, [pedidoId, atualizarStatus]);
 
   useEffect(() => {
     carregarDados();

@@ -114,7 +114,20 @@ export function criarPedidoMock(dados: DadosCheckout): Pedido {
   return {
     id: gerarId(),
     status: 'confirmado',
-    itens: dados.itens,
+    itens: dados.itens.map((item) => ({
+      produto: {
+        id: item.produtoId,
+        especie: 'Produto',
+        foto: '',
+        precoPorKg: 0,
+        pesoDisponivel: 0,
+        cortesDisponiveis: [],
+        pescador: { id: '', nome: '', foto: '' },
+        categoria: 'peixe',
+      },
+      corte: item.corte,
+      pesoKg: item.pesoKg,
+    })),
     enderecoEntrega: dados.enderecoEntrega,
     janelaEntrega: dados.janelaEntrega,
     frete: dados.frete,

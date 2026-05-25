@@ -1,36 +1,29 @@
 import { create } from 'zustand';
-import { Pedido, DadosCheckout } from '../types';
+import { PedidoStore, DadosCheckout } from '../types';
 import { pedidoService } from '../services/pedidoService';
+import { useCarrinhoStore } from './carrinhoStore';
 
-interface PedidoStoreState {
-  pedidoAtivo: Pedido | null;
-  historico: Pedido[];
-  loading: boolean;
-  fazerPedido: (dados: DadosCheckout) => Promise<void>;
-  buscarStatus: (pedidoId: string) => Promise<void>;
-  listarHistorico: () => Promise<void>;
-}
-
-export const usePedidoStore = create<PedidoStoreState>((set) => ({
+export const usePedidoStore = create<PedidoStore>((set) => ({
   pedidoAtivo: null,
   historico: [],
   loading: false,
 
-  fazerPedido: async (dados) => {
+  fazerPedido: async (checkout: DadosCheckout) => {
     set({ loading: true });
     try {
-      const { data } = await pedidoService.criar(dados);
-      set({ pedidoAtivo: data });
+      const resp = await pedidoService.criar(checkout);
+      set({ pedidoAtivo: resp.data });
+      useCarrinhoStore.getState().limpar();
     } finally {
       set({ loading: false });
     }
   },
 
-  buscarStatus: async (pedidoId) => {
+  atualizarStatus: async (pedidoId: string) => {
     set({ loading: true });
     try {
-      const { data } = await pedidoService.buscarStatus(pedidoId);
-      set({ pedidoAtivo: data });
+      const resp = await pedidoService.buscarStatus(pedidoId);
+      set({ pedidoAtivo: resp.data });
     } finally {
       set({ loading: false });
     }
@@ -39,8 +32,8 @@ export const usePedidoStore = create<PedidoStoreState>((set) => ({
   listarHistorico: async () => {
     set({ loading: true });
     try {
-      const { data } = await pedidoService.listarHistorico();
-      set({ historico: data.pedidos });
+      const resp = await pedidoService.listarHistorico();
+      set({ historico: resp.data.pedidos });
     } finally {
       set({ loading: false });
     }
