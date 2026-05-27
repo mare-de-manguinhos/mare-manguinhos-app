@@ -11,8 +11,8 @@ export const usePedidoStore = create<PedidoStore>((set) => ({
   fazerPedido: async (checkout: DadosCheckout) => {
     set({ loading: true });
     try {
-      const resp = await pedidoService.criar(checkout);
-      set({ pedidoAtivo: resp.data });
+      const pedido = await pedidoService.criar(checkout);
+      set({ pedidoAtivo: pedido });
       useCarrinhoStore.getState().limpar();
     } finally {
       set({ loading: false });
@@ -22,8 +22,8 @@ export const usePedidoStore = create<PedidoStore>((set) => ({
   atualizarStatus: async (pedidoId: string) => {
     set({ loading: true });
     try {
-      const resp = await pedidoService.buscarStatus(pedidoId);
-      set({ pedidoAtivo: resp.data });
+      const pedido = await pedidoService.buscarStatus(pedidoId);
+      set({ pedidoAtivo: pedido });
     } finally {
       set({ loading: false });
     }
@@ -32,8 +32,8 @@ export const usePedidoStore = create<PedidoStore>((set) => ({
   listarHistorico: async () => {
     set({ loading: true });
     try {
-      const resp = await pedidoService.listarHistorico();
-      set({ historico: resp.data.pedidos });
+      const data = await pedidoService.listarHistorico();
+      set({ historico: data.pedidos });
     } finally {
       set({ loading: false });
     }
