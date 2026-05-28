@@ -49,15 +49,15 @@ export default function PerfilScreen() {
 
   const carregar = useCallback(async () => {
     try {
-      const [respPerfil, respEnderecos] = await Promise.all([
+      const [perfil, enderecosLista] = await Promise.all([
         perfilService.buscar(),
         perfilService.listarEnderecos(),
       ]);
 
-      setUsuario(respPerfil.data);
-      setEnderecos(respEnderecos.data);
-      setNomeEditado(respPerfil.data.nome);
-      setTelefoneEditado(respPerfil.data.telefone);
+      setUsuario(perfil);
+      setEnderecos(enderecosLista);
+      setNomeEditado(perfil.nome);
+      setTelefoneEditado(perfil.telefone);
       setEstado('listando');
     } catch (error: any) {
       console.log('❌ Erro ao carregar perfil:', error);
@@ -93,11 +93,11 @@ export default function PerfilScreen() {
 
     setLoadingAtualizacao(true);
     try {
-      const resp = await perfilService.atualizar({
+      const perfilAtualizado = await perfilService.atualizar({
         nome: nomeEditado,
         telefone: telefoneEditado,
       });
-      setUsuario(resp.data);
+      setUsuario(perfilAtualizado);
       setEstado('listando');
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso');
     } catch {
@@ -125,8 +125,8 @@ export default function PerfilScreen() {
 
     setLoadingEndereco(true);
     try {
-      const resp = await perfilService.criarEndereco(novoEndereco);
-      setEnderecos([...enderecos, resp.data]);
+      const enderecoCriado = await perfilService.criarEndereco(novoEndereco);
+      setEnderecos([...enderecos, enderecoCriado]);
       setNovoEndereco({
         label: '',
         logradouro: '',

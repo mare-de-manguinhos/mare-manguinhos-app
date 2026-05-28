@@ -120,6 +120,7 @@ export default function RegisterScreen() {
         telefone: rawPhone(basic.telefone),
         password: basic.password,
         endereco: {
+          label: 'Casa',
           logradouro: address.logradouro.trim(),
           numero: address.numero.trim(),
           complemento: address.complemento.trim() || undefined,

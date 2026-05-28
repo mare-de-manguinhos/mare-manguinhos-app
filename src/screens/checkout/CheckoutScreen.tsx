@@ -130,10 +130,10 @@ export default function CheckoutScreen() {
   const carregarEnderecos = async () => {
     try {
       setCarregandoEnderecos(true);
-      const resp = await perfilService.listarEnderecos();
-      setEnderecos(resp.data);
-      if (resp.data.length > 0) {
-        setEnderecoSelecionado(resp.data[0].id);
+      const enderecosLista = await perfilService.listarEnderecos();
+      setEnderecos(enderecosLista);
+      if (enderecosLista.length > 0) {
+        setEnderecoSelecionado(enderecosLista[0].id);
       }
     } catch {
       setEnderecos([]);
@@ -161,11 +161,11 @@ export default function CheckoutScreen() {
       // Mock: sem coordenadas, usar apenas endereço
       const enderecoCompleto = `${endereco.logradouro}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`;
 
-      const resp = await freteService.calcular({ endereco: enderecoCompleto });
-      setFrete(resp.data);
+      const freteCalculado = await freteService.calcular({ endereco: enderecoCompleto });
+      setFrete(freteCalculado);
     } catch {
       // Fallback com valor fixo para MVP
-      setFrete({ valorFrete: 8.5, prazoEstimadoMinutos: 45 });
+      setFrete({ valorFrete: 8.0, prazoEstimadoMinutos: 45 });
       setErroFrete(null);
     } finally {
       setCarregandoFrete(false);
@@ -198,9 +198,9 @@ export default function CheckoutScreen() {
 
     try {
       setSalvandoEndereco(true);
-      const resp = await perfilService.criarEndereco(novoEndereco);
-      setEnderecos([...enderecos, resp.data]);
-      setEnderecoSelecionado(resp.data.id);
+      const enderecoCriado = await perfilService.criarEndereco(novoEndereco);
+      setEnderecos([...enderecos, enderecoCriado]);
+      setEnderecoSelecionado(enderecoCriado.id);
       setMostrarFormularioEndereco(false);
       setNovoEndereco({
         label: '',

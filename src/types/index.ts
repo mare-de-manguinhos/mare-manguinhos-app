@@ -57,6 +57,7 @@ export interface Pedido {
   valorTotal: number;
   formaPagamento: FormaPagamento;
   criadoEm: string;
+  atualizadoEm?: string;
 }
 
 export interface ItemPedidoInput {

@@ -21,6 +21,7 @@ api.interceptors.response.use(
   (resposta) => resposta,
   (erro) => {
     if (erro?.response?.status === 401) {
+      console.warn('[API] 401 recebido - fazendo logout automático. URL:', erro.config?.url);
       useAuthStore.getState().logout();
     }
     return Promise.reject(erro);

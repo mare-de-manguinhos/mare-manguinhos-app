@@ -12,16 +12,16 @@ export const useAuthStore = create<AuthStore>((set) => ({
   enderecoPrincipal: null,
 
   login: async (email: string, senha: string) => {
-    const { data: authData } = await authService.login(email, senha);
+    const authData = await authService.login(email, senha);
     await SecureStore.setItemAsync(TOKEN_KEY, authData.token);
     set({ token: authData.token });
 
-    const { data: perfil } = await authService.eu();
+    const perfil = await authService.eu();
     const usuario = { id: perfil.id, nome: perfil.nome, email: perfil.email, telefone: perfil.telefone };
 
     let enderecoPrincipal = null;
     try {
-      const { data: enderecos } = await perfilService.listarEnderecos();
+      const enderecos = await perfilService.listarEnderecos();
       enderecoPrincipal = enderecos.find((e) => e.principal) ?? enderecos[0] ?? null;
     } catch {
       // Sem enderecos ainda — ok
@@ -36,7 +36,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   register: async (payload: RegisterPayload) => {
-    const { data: authData } = await authService.cadastro(payload);
+    const authData = await authService.cadastro(payload);
     await SecureStore.setItemAsync(TOKEN_KEY, authData.token);
 
     const usuario = { id: authData.id, nome: authData.nome, email: authData.email, telefone: payload.telefone };
@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     let enderecoPrincipal = null;
     if (payload.endereco) {
       try {
-        const { data: endereco } = await perfilService.criarEndereco(payload.endereco);
+        const endereco = await perfilService.criarEndereco({ ...payload.endereco, principal: true });
         enderecoPrincipal = endereco;
       } catch {
         // Endereco opcional
@@ -52,5 +52,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
 
     set({ token: authData.token, usuario, enderecoPrincipal });
+    console.log('[AuthStore] register concluído - token definido:', !!authData.token);
   },
 }));
