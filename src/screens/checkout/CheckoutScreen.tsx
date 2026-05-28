@@ -12,15 +12,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { CarrinhoStackParamList } from '../../navigation/types';
 import { useCarrinhoStore } from '../../store/carrinhoStore';
 import { perfilService } from '../../services/perfilService';
 import { freteService } from '../../services/freteService';
 import { usePedidoStore } from '../../store/pedidoStore';
-import { USE_MOCK } from '../../services/pedidoService';
-import { Endereco, FormaPagamento } from '../../types';
+import type { Endereco, FormaPagamento } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
 import Chip from '../../components/ui/Chip';
@@ -123,6 +122,13 @@ export default function CheckoutScreen() {
   const [formaPagamento, setFormaPagamento] = useState<FormaPagamento>('pix');
   const [janelaTempo, setJanelaTempo] = useState('14:00-16:00');
 
+  // Voltar ao carrinho se estiver vazio (ex: ao retornar após pedido finalizado)
+  useEffect(() => {
+    if (itens.length === 0) {
+      navigation.dispatch(CommonActions.goBack());
+    }
+  }, []);
+
   // Inicializar endereços
   useEffect(() => {
     carregarEnderecos();
@@ -131,10 +137,10 @@ export default function CheckoutScreen() {
   const carregarEnderecos = async () => {
     try {
       setCarregandoEnderecos(true);
-      const resp = await perfilService.listarEnderecos();
-      setEnderecos(resp.data);
-      if (resp.data.length > 0) {
-        setEnderecoSelecionado(resp.data[0].id);
+      const enderecosLista = await perfilService.listarEnderecos();
+      setEnderecos(enderecosLista);
+      if (enderecosLista.length > 0) {
+        setEnderecoSelecionado(enderecosLista[0].id);
       }
     } catch {
       setEnderecos([]);
@@ -162,11 +168,11 @@ export default function CheckoutScreen() {
       // Mock: sem coordenadas, usar apenas endereço
       const enderecoCompleto = `${endereco.logradouro}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`;
 
-      const resp = await freteService.calcular({ endereco: enderecoCompleto });
-      setFrete(resp.data);
+      const freteCalculado = await freteService.calcular({ endereco: enderecoCompleto });
+      setFrete(freteCalculado);
     } catch {
       // Fallback com valor fixo para MVP
-      setFrete({ valorFrete: 8.5, prazoEstimadoMinutos: 45 });
+      setFrete({ valorFrete: 8.0, prazoEstimadoMinutos: 45 });
       setErroFrete(null);
     } finally {
       setCarregandoFrete(false);
@@ -199,9 +205,9 @@ export default function CheckoutScreen() {
 
     try {
       setSalvandoEndereco(true);
-      const resp = await perfilService.criarEndereco(novoEndereco);
-      setEnderecos([...enderecos, resp.data]);
-      setEnderecoSelecionado(resp.data.id);
+      const enderecoCriado = await perfilService.criarEndereco(novoEndereco);
+      setEnderecos([...enderecos, enderecoCriado]);
+      setEnderecoSelecionado(enderecoCriado.id);
       setMostrarFormularioEndereco(false);
       setNovoEndereco({
         label: '',
@@ -223,14 +229,6 @@ export default function CheckoutScreen() {
   };
 
   const finalizarPedido = async () => {
-    if (USE_MOCK) {
-      Alert.alert(
-        'Indisponível',
-        'O checkout será ativado quando o backend estiver disponível.'
-      );
-      return;
-    }
-
     // Validações
     if (tipoEntrega === 'entrega' && !enderecoSelecionado) {
       Alert.alert('Erro', 'Selecione um endereço de entrega');
@@ -272,6 +270,13 @@ export default function CheckoutScreen() {
 
       const { pedidoAtivo } = usePedidoStore.getState();
 
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'CarrinhoLista' }],
+        }),
+      );
+
       Alert.alert('Pedido Confirmado!', `Seu pedido #${pedidoAtivo?.id} foi criado com sucesso.`, [
         {
           text: 'Acompanhar Pedido',
@@ -290,25 +295,9 @@ export default function CheckoutScreen() {
     }
   };
 
+  // Redirecionamento automático tratado no useEffect acima
   if (itens.length === 0) {
-    return (
-      <SafeAreaView edges={['top']} className="flex-1 bg-areia">
-        <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="cart-outline" size={80} color="#6B655A" />
-          <Text className="text-ardosia text-lg font-bold mt-6 text-center">
-            Carrinho vazio
-          </Text>
-          <Text className="text-marinha text-sm mt-2 text-center mb-6">
-            Adicione produtos antes de fazer checkout
-          </Text>
-          <AppButton
-            label="Voltar"
-            onPress={() => navigation.goBack()}
-            accessibilityLabel="Voltar"
-          />
-        </View>
-      </SafeAreaView>
-    );
+    return null;
   }
 
   return (

@@ -12,6 +12,8 @@ interface FreteResponse {
 }
 
 export const freteService = {
-  calcular: (params: FreteParams) =>
-    api.post<FreteResponse>('/api/app/frete/calcular', params),
+  calcular: async (params: FreteParams) => {
+    const { data } = await api.post<FreteResponse>('/api/app/frete/calcular', params);
+    return data;
+  },
 };
