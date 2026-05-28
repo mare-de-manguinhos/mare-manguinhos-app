@@ -1,5 +1,7 @@
 import api from './api';
 
+export const USE_MOCK_FRETE = true;
+
 interface FreteParams {
   endereco: string;
   latitude?: number;
