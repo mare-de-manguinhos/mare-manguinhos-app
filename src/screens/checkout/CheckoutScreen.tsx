@@ -23,6 +23,7 @@ import type { Endereco, FormaPagamento } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
 import Chip from '../../components/ui/Chip';
+import RotaEntregaCard from '../../components/checkout/RotaEntregaCard';
 
 type NavProp = StackNavigationProp<CarrinhoStackParamList, 'Checkout'>;
 
@@ -165,7 +166,6 @@ export default function CheckoutScreen() {
       setCarregandoFrete(true);
       setErroFrete(null);
 
-      // Mock: sem coordenadas, usar apenas endereço
       const enderecoCompleto = `${endereco.logradouro}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`;
 
       const freteCalculado = await freteService.calcular({ endereco: enderecoCompleto });
@@ -480,6 +480,14 @@ export default function CheckoutScreen() {
             )}
           </View>
         )}
+
+        {/* Rota de Entrega */}
+        <RotaEntregaCard
+          tipoEntrega={tipoEntrega}
+          enderecoDestino={enderecos.find((e) => e.id === enderecoSelecionado) ?? null}
+          frete={frete}
+          carregandoFrete={carregandoFrete}
+        />
 
         {/* Janela de Horário */}
         <View className="px-4 mt-6">
