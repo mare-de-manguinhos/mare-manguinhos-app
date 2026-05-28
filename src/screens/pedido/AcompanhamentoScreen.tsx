@@ -138,7 +138,7 @@ export default function AcompanhamentoScreen() {
         <View className="bg-white rounded-3xl p-5 shadow-sm mb-6 border border-pedra-mar/30">
           <Text className="text-ardosia font-bold text-lg mb-4">Produtos da Maré</Text>
           {pedido.itens.map((item, index) => (
-            <View key={index} className="flex-row items-center mb-4 last:mb-0">
+            <View key={index} className="flex-row items-center mb-6">
               <View className="bg-terracota/10 p-2 rounded-xl mr-3">
                 <MaterialCommunityIcons name="fish" size={20} color="#D45D4A" />
               </View>

@@ -24,6 +24,8 @@ import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
 import Chip from '../../components/ui/Chip';
 import RotaEntregaCard from '../../components/checkout/RotaEntregaCard';
+import { buscarCep } from '../../services/cepService';
+import { formatCEP, rawCEP } from '../../utils/formatCEP';
 
 type NavProp = StackNavigationProp<CarrinhoStackParamList, 'Checkout'>;
 
@@ -73,6 +75,7 @@ export default function CheckoutScreen() {
   });
   const [errosEndereco, setErrosEndereco] = useState<Record<string, string>>({});
   const [salvandoEndereco, setSalvandoEndereco] = useState(false);
+  const [cepLoading, setCepLoading] = useState(false);
 
   // Animação do modal de endereço
   const animEndereco = useRef(new Animated.Value(0)).current;
@@ -187,16 +190,41 @@ export default function CheckoutScreen() {
     }
   }, [tipoEntrega, calcularFrete]);
 
+  // ── CEP auto-fill (ViaCEP) ──────────────────────────────────────────────
+
+  useEffect(() => {
+    const raw = rawCEP(novoEndereco.cep);
+    if (raw.length !== 8) return;
+
+    let ignore = false;
+    setCepLoading(true);
+    buscarCep(raw).then((data) => {
+      if (ignore) return;
+      if (data) {
+        setNovoEndereco((prev) => ({
+          ...prev,
+          logradouro: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.cidade,
+          estado: data.estado,
+        }));
+      }
+      setCepLoading(false);
+    });
+
+    return () => { ignore = true; };
+  }, [novoEndereco.cep]);
+
   const adicionarEndereco = async () => {
     const erros: Record<string, string> = {};
 
-    if (!novoEndereco.label.trim()) erros.label = 'Label obrigatório';
-    if (!novoEndereco.logradouro.trim()) erros.logradouro = 'Logradouro obrigatório';
-    if (!novoEndereco.numero.trim()) erros.numero = 'Número obrigatório';
-    if (!novoEndereco.bairro.trim()) erros.bairro = 'Bairro obrigatório';
-    if (!novoEndereco.cidade.trim()) erros.cidade = 'Cidade obrigatória';
-    if (!novoEndereco.estado.trim()) erros.estado = 'Estado obrigatório';
-    if (!novoEndereco.cep.trim()) erros.cep = 'CEP obrigatório';
+    if (!novoEndereco.label.trim()) erros.label = 'Insira uma label (ex: Casa, Trabalho)';
+    if (!novoEndereco.logradouro.trim()) erros.logradouro = 'Insira o logradouro';
+    if (!novoEndereco.numero.trim()) erros.numero = 'Insira o número';
+    if (!novoEndereco.bairro.trim()) erros.bairro = 'Insira o bairro';
+    if (!novoEndereco.cidade.trim()) erros.cidade = 'Insira a cidade';
+    if (!novoEndereco.estado.trim()) erros.estado = 'Insira o estado';
+    if (rawCEP(novoEndereco.cep).length < 8) erros.cep = 'Insira um CEP válido';
 
     if (Object.keys(erros).length > 0) {
       setErrosEndereco(erros);
@@ -651,7 +679,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Label (ex: Casa, Trabalho)"
                 value={novoEndereco.label}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, label: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, label: text }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.label; return n; });
+                }}
                 placeholder="Label"
                 error={errosEndereco.label}
                 accessibilityLabel="Label do endereço"
@@ -660,7 +691,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Logradouro"
                 value={novoEndereco.logradouro}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, logradouro: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, logradouro: text }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.logradouro; return n; });
+                }}
                 placeholder="Rua, Avenida, etc."
                 error={errosEndereco.logradouro}
                 accessibilityLabel="Logradouro"
@@ -669,7 +703,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Número"
                 value={novoEndereco.numero}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, numero: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, numero: text }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.numero; return n; });
+                }}
                 placeholder="123"
                 error={errosEndereco.numero}
                 accessibilityLabel="Número"
@@ -678,7 +715,7 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Complemento"
                 value={novoEndereco.complemento}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, complemento: text })}
+                onChangeText={(text) => setNovoEndereco((prev) => ({ ...prev, complemento: text }))}
                 placeholder="Apto 101, Sala 3, etc. (opcional)"
                 accessibilityLabel="Complemento"
               />
@@ -686,7 +723,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Bairro"
                 value={novoEndereco.bairro}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, bairro: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, bairro: text }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.bairro; return n; });
+                }}
                 placeholder="Bairro"
                 error={errosEndereco.bairro}
                 accessibilityLabel="Bairro"
@@ -695,7 +735,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Cidade"
                 value={novoEndereco.cidade}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cidade: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, cidade: text }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.cidade; return n; });
+                }}
                 placeholder="Cidade"
                 error={errosEndereco.cidade}
                 accessibilityLabel="Cidade"
@@ -704,7 +747,10 @@ export default function CheckoutScreen() {
               <AppInput
                 label="Estado"
                 value={novoEndereco.estado}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, estado: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, estado: text.toUpperCase().slice(0, 2) }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.estado; return n; });
+                }}
                 placeholder="ES"
                 accessibilityLabel="Estado"
                 error={errosEndereco.estado}
@@ -713,11 +759,15 @@ export default function CheckoutScreen() {
               <AppInput
                 label="CEP"
                 value={novoEndereco.cep}
-                onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cep: text })}
+                onChangeText={(text) => {
+                  setNovoEndereco((prev) => ({ ...prev, cep: formatCEP(text) }));
+                  setErrosEndereco((prev) => { const n = { ...prev }; delete n.cep; return n; });
+                }}
                 placeholder="29160-000"
                 keyboardType="numeric"
                 error={errosEndereco.cep}
                 accessibilityLabel="CEP"
+                editable={!cepLoading}
               />
 
               <View className="flex-row gap-3 mt-4">

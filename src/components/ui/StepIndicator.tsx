@@ -62,7 +62,7 @@ export default function StepIndicator({
             {/* Linha Conectora */}
             {!isLast && (
               <View
-                className={`flex-1 h-0.5 mb-10 ${
+                className={`w-3 h-0.5 mb-10 ${
                   isCompleted ? 'bg-terracota' : 'bg-pedra-mar'
                 }`}
               />
