@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { CarrinhoStackParamList } from '../../navigation/types';
 import { useCarrinhoStore } from '../../store/carrinhoStore';
@@ -121,6 +121,13 @@ export default function CheckoutScreen() {
   // Pagamento
   const [formaPagamento, setFormaPagamento] = useState<FormaPagamento>('pix');
   const [janelaTempo, setJanelaTempo] = useState('14:00-16:00');
+
+  // Voltar ao carrinho se estiver vazio (ex: ao retornar após pedido finalizado)
+  useEffect(() => {
+    if (itens.length === 0) {
+      navigation.dispatch(CommonActions.goBack());
+    }
+  }, []);
 
   // Inicializar endereços
   useEffect(() => {
@@ -263,6 +270,13 @@ export default function CheckoutScreen() {
 
       const { pedidoAtivo } = usePedidoStore.getState();
 
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'CarrinhoLista' }],
+        }),
+      );
+
       Alert.alert('Pedido Confirmado!', `Seu pedido #${pedidoAtivo?.id} foi criado com sucesso.`, [
         {
           text: 'Acompanhar Pedido',
@@ -281,25 +295,9 @@ export default function CheckoutScreen() {
     }
   };
 
+  // Redirecionamento automático tratado no useEffect acima
   if (itens.length === 0) {
-    return (
-      <SafeAreaView edges={['top']} className="flex-1 bg-areia">
-        <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="cart-outline" size={80} color="#6B655A" />
-          <Text className="text-ardosia text-lg font-bold mt-6 text-center">
-            Carrinho vazio
-          </Text>
-          <Text className="text-marinha text-sm mt-2 text-center mb-6">
-            Adicione produtos antes de fazer checkout
-          </Text>
-          <AppButton
-            label="Voltar"
-            onPress={() => navigation.goBack()}
-            accessibilityLabel="Voltar"
-          />
-        </View>
-      </SafeAreaView>
-    );
+    return null;
   }
 
   return (

@@ -269,6 +269,7 @@ export interface PedidoStore {
   fazerPedido: (checkout: DadosCheckout) => Promise<void>;
   atualizarStatus: (pedidoId: string) => Promise<void>;
   listarHistorico: () => Promise<void>;
+  limpar: () => void;
 }
 
 

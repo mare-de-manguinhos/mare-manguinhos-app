@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
 import { authService } from '../services/authService';
 import { perfilService } from '../services/perfilService';
+import { useCarrinhoStore } from './carrinhoStore';
+import { usePedidoStore } from './pedidoStore';
 import type { AuthStore, RegisterPayload } from '../types';
 
 const TOKEN_KEY = 'auth_token';
@@ -32,12 +34,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   logout: async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
+    useCarrinhoStore.getState().limpar();
+    usePedidoStore.getState().limpar();
     set({ token: null, usuario: null, enderecoPrincipal: null });
   },
 
   register: async (payload: RegisterPayload) => {
     const authData = await authService.cadastro(payload);
     await SecureStore.setItemAsync(TOKEN_KEY, authData.token);
+    set({ token: authData.token });
 
     const usuario = { id: authData.id, nome: authData.nome, email: authData.email, telefone: payload.telefone };
 
@@ -51,7 +56,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
       }
     }
 
-    set({ token: authData.token, usuario, enderecoPrincipal });
-    console.log('[AuthStore] register concluído - token definido:', !!authData.token);
+    set({ usuario, enderecoPrincipal });
   },
 }));

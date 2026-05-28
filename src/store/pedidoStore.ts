@@ -38,4 +38,6 @@ export const usePedidoStore = create<PedidoStore>((set) => ({
       set({ loading: false });
     }
   },
+
+  limpar: () => set({ pedidoAtivo: null, historico: [] }),
 }));

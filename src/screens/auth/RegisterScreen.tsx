@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { useAuthStore } from '../../store/authStore';
 import { BasicFormState, AddressFormState, RegisterStep } from '../../types';
 import { formatBrazilianPhone, rawPhone } from '../../utils/formatPhone';
 import { formatCEP, rawCEP } from '../../utils/formatCEP';
+import { buscarCep } from '../../services/cepService';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -51,6 +52,32 @@ export default function RegisterScreen() {
   const [currentStep, setCurrentStep] = useState<RegisterStep>(1);
   const [basic, setBasic] = useState<BasicFormState>(initialBasic);
   const [address, setAddress] = useState<AddressFormState>(initialAddress);
+  const [cepLoading, setCepLoading] = useState(false);
+
+  // ── CEP auto-fill (ViaCEP) ──────────────────────────────────────────────
+
+  useEffect(() => {
+    const raw = rawCEP(address.cep);
+    if (raw.length !== 8) return;
+
+    let ignore = false;
+    setCepLoading(true);
+    buscarCep(raw).then((data) => {
+      if (ignore) return;
+      if (data) {
+        setAddress((prev) => ({
+          ...prev,
+          logradouro: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.cidade,
+          estado: data.estado,
+        }));
+      }
+      setCepLoading(false);
+    });
+
+    return () => { ignore = true; };
+  }, [address.cep]);
 
   // ── Step 1 validation ────────────────────────────────────────────────────
 
