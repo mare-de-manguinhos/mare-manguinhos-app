@@ -1,39 +1,19 @@
 import api from './api';
-import { Pedido, DadosCheckout } from '../types';
-import { pedidosMock, buscarPedidoMock, criarPedidoMock } from './pedidoDataMock';
-
-export const USE_MOCK = true;
+import type { Pedido, DadosCheckout } from '../types';
 
 export const pedidoService = {
-  criar: async (dados: DadosCheckout): Promise<{ data: Pedido }> => {
-    if (USE_MOCK) {
-      return { data: criarPedidoMock(dados) };
-    }
+  async criar(dados: DadosCheckout): Promise<Pedido> {
     const { data } = await api.post<Pedido>('/api/app/pedidos', dados);
-    return { data };
+    return data;
   },
 
-  buscarStatus: async (id: string): Promise<{ data: Pedido }> => {
-    if (USE_MOCK) {
-      const pedido = buscarPedidoMock(id);
-      if (!pedido) throw new Error('Pedido não encontrado');
-      return { data: pedido };
-    }
+  async buscarStatus(id: string): Promise<Pedido> {
     const { data } = await api.get<Pedido>(`/api/app/pedidos/${id}`);
-    return { data };
+    return data;
   },
 
-  listarHistorico: async (params?: { pagina?: number; limite?: number }): Promise<{ data: { pedidos: Pedido[]; totalPaginas: number; paginaAtual: number } }> => {
-    if (USE_MOCK) {
-      return {
-        data: {
-          pedidos: pedidosMock,
-          totalPaginas: 1,
-          paginaAtual: 1,
-        },
-      };
-    }
+  async listarHistorico(params?: { pagina?: number; limite?: number }): Promise<{ pedidos: Pedido[]; totalPaginas: number; paginaAtual: number }> {
     const { data } = await api.get<{ pedidos: Pedido[]; totalPaginas: number; paginaAtual: number }>('/api/app/pedidos/meus', { params });
-    return { data };
+    return data;
   },
 };

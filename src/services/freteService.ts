@@ -14,11 +14,8 @@ interface FreteResponse {
 }
 
 export const freteService = {
-  calcular: async (params: FreteParams): Promise<{ data: FreteResponse }> => {
-    if (USE_MOCK_FRETE) {
-      await new Promise<void>((r) => setTimeout(r, 900));
-      return { data: { valorFrete: 8.5, prazoEstimadoMinutos: 45 } };
-    }
-    return api.post<FreteResponse>('/api/app/frete/calcular', params);
+  calcular: async (params: FreteParams) => {
+    const { data } = await api.post<FreteResponse>('/api/app/frete/calcular', params);
+    return data;
   },
 };

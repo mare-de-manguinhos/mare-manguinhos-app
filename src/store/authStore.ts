@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
-import { AuthStore, Endereco, RegisterPayload } from '../types';
+import { authService } from '../services/authService';
+import { perfilService } from '../services/perfilService';
+import { useCarrinhoStore } from './carrinhoStore';
+import { usePedidoStore } from './pedidoStore';
+import type { AuthStore, RegisterPayload } from '../types';
 
 const TOKEN_KEY = 'auth_token';
 
@@ -10,54 +14,48 @@ export const useAuthStore = create<AuthStore>((set) => ({
   enderecoPrincipal: null,
 
   login: async (email: string, senha: string) => {
-    // TODO: substituir mock por authService.login(email, senha) em services/authService.ts
-    await new Promise<void>((r) => setTimeout(r, 1500));
-    const mockToken = 'mock-jwt-token';
-    const mockUsuario = { id: '1', nome: 'Alex Rossoni', email, telefone: '' };
-    const mockEndereco: Endereco = {
-      id: '1',
-      label: 'Casa',
-      logradouro: 'Rua dos Carros',
-      numero: '123',
-      bairro: 'Manguinhos',
-      cidade: 'Serra',
-      estado: 'ES',
-      cep: '29160-000',
-      principal: true,
-    };
-    await SecureStore.setItemAsync(TOKEN_KEY, mockToken);
-    set({ token: mockToken, usuario: mockUsuario, enderecoPrincipal: mockEndereco });
+    const authData = await authService.login(email, senha);
+    await SecureStore.setItemAsync(TOKEN_KEY, authData.token);
+    set({ token: authData.token });
+
+    const perfil = await authService.eu();
+    const usuario = { id: perfil.id, nome: perfil.nome, email: perfil.email, telefone: perfil.telefone };
+
+    let enderecoPrincipal = null;
+    try {
+      const enderecos = await perfilService.listarEnderecos();
+      enderecoPrincipal = enderecos.find((e) => e.principal) ?? enderecos[0] ?? null;
+    } catch {
+      // Sem enderecos ainda — ok
+    }
+
+    set({ token: authData.token, usuario, enderecoPrincipal });
   },
 
   logout: async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
+    useCarrinhoStore.getState().limpar();
+    usePedidoStore.getState().limpar();
     set({ token: null, usuario: null, enderecoPrincipal: null });
   },
 
   register: async (payload: RegisterPayload) => {
-    // TODO: substituir mock por authService.register(payload)
-    await new Promise<void>((r) => setTimeout(r, 1500));
-    const mockToken = 'mock-jwt-token';
-    const mockUsuario = {
-      id: '1',
-      nome: payload.nome,
-      email: payload.email,
-      telefone: payload.telefone,
-    };
-    const mockEndereco: Endereco = payload.endereco
-      ? { id: '1', label: 'Casa', ...payload.endereco, principal: true }
-      : {
-          id: '1',
-          label: 'Casa',
-          logradouro: 'Rua das Flores',
-          numero: '123',
-          bairro: 'Manguinhos',
-          cidade: 'Serra',
-          estado: 'ES',
-          cep: '29160-000',
-          principal: true,
-        };
-    await SecureStore.setItemAsync(TOKEN_KEY, mockToken);
-    set({ token: mockToken, usuario: mockUsuario, enderecoPrincipal: mockEndereco });
+    const authData = await authService.cadastro(payload);
+    await SecureStore.setItemAsync(TOKEN_KEY, authData.token);
+    set({ token: authData.token });
+
+    const usuario = { id: authData.id, nome: authData.nome, email: authData.email, telefone: payload.telefone };
+
+    let enderecoPrincipal = null;
+    if (payload.endereco) {
+      try {
+        const endereco = await perfilService.criarEndereco({ ...payload.endereco, principal: true });
+        enderecoPrincipal = endereco;
+      } catch {
+        // Endereco opcional
+      }
+    }
+
+    set({ usuario, enderecoPrincipal });
   },
 }));

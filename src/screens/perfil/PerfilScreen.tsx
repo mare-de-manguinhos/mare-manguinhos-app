@@ -14,7 +14,8 @@ import { perfilService } from '../../services/perfilService';
 import { Endereco, Usuario } from '../../types';
 import AppButton from '../../components/ui/AppButton';
 import AppInput from '../../components/ui/AppInput';
-import OceanHeader from '../../components/shared/OceanHeader';
+import { buscarCep } from '../../services/cepService';
+import { formatCEP, rawCEP } from '../../utils/formatCEP';
 
 type Estado = 'carregando' | 'editando' | 'listando' | 'criando_endereco' | 'erro';
 
@@ -46,18 +47,19 @@ export default function PerfilScreen() {
   });
   const [loadingEndereco, setLoadingEndereco] = useState(false);
   const [errosEndereco, setErrosEndereco] = useState<Record<string, string>>({});
+  const [cepLoading, setCepLoading] = useState(false);
 
   const carregar = useCallback(async () => {
     try {
-      const [respPerfil, respEnderecos] = await Promise.all([
+      const [perfil, enderecosLista] = await Promise.all([
         perfilService.buscar(),
         perfilService.listarEnderecos(),
       ]);
 
-      setUsuario(respPerfil.data);
-      setEnderecos(respEnderecos.data);
-      setNomeEditado(respPerfil.data.nome);
-      setTelefoneEditado(respPerfil.data.telefone);
+      setUsuario(perfil);
+      setEnderecos(enderecosLista);
+      setNomeEditado(perfil.nome);
+      setTelefoneEditado(perfil.telefone);
       setEstado('listando');
     } catch (error: any) {
       console.log('❌ Erro ao carregar perfil:', error);
@@ -85,6 +87,31 @@ export default function PerfilScreen() {
     setRefreshing(false);
   }, [carregar]);
 
+  // ── CEP auto-fill (ViaCEP) ──────────────────────────────────────────────
+
+  useEffect(() => {
+    const raw = rawCEP(novoEndereco.cep);
+    if (raw.length !== 8) return;
+
+    let ignore = false;
+    setCepLoading(true);
+    buscarCep(raw).then((data) => {
+      if (ignore) return;
+      if (data) {
+        setNovoEndereco((prev) => ({
+          ...prev,
+          logradouro: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.cidade,
+          estado: data.estado,
+        }));
+      }
+      setCepLoading(false);
+    });
+
+    return () => { ignore = true; };
+  }, [novoEndereco.cep]);
+
   const handleAtualizarPerfil = async () => {
     if (!nomeEditado.trim()) {
       Alert.alert('Erro', 'Nome não pode estar vazio');
@@ -93,11 +120,11 @@ export default function PerfilScreen() {
 
     setLoadingAtualizacao(true);
     try {
-      const resp = await perfilService.atualizar({
+      const perfilAtualizado = await perfilService.atualizar({
         nome: nomeEditado,
         telefone: telefoneEditado,
       });
-      setUsuario(resp.data);
+      setUsuario(perfilAtualizado);
       setEstado('listando');
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso');
     } catch {
@@ -110,13 +137,13 @@ export default function PerfilScreen() {
   const handleCriarEndereco = async () => {
     const erros: Record<string, string> = {};
 
-    if (!novoEndereco.label.trim()) erros.label = 'Label obrigatório';
-    if (!novoEndereco.logradouro.trim()) erros.logradouro = 'Logradouro obrigatório';
-    if (!novoEndereco.numero.trim()) erros.numero = 'Número obrigatório';
-    if (!novoEndereco.bairro.trim()) erros.bairro = 'Bairro obrigatório';
-    if (!novoEndereco.cidade.trim()) erros.cidade = 'Cidade obrigatória';
-    if (!novoEndereco.estado.trim()) erros.estado = 'Estado obrigatório';
-    if (!novoEndereco.cep.trim()) erros.cep = 'CEP obrigatório';
+    if (!novoEndereco.label.trim()) erros.label = 'Insira uma label (ex: Casa, Trabalho)';
+    if (!novoEndereco.logradouro.trim()) erros.logradouro = 'Insira o logradouro';
+    if (!novoEndereco.numero.trim()) erros.numero = 'Insira o número';
+    if (!novoEndereco.bairro.trim()) erros.bairro = 'Insira o bairro';
+    if (!novoEndereco.cidade.trim()) erros.cidade = 'Insira a cidade';
+    if (!novoEndereco.estado.trim()) erros.estado = 'Insira o estado';
+    if (rawCEP(novoEndereco.cep).length < 8) erros.cep = 'Insira um CEP válido';
 
     if (Object.keys(erros).length > 0) {
       setErrosEndereco(erros);
@@ -125,8 +152,8 @@ export default function PerfilScreen() {
 
     setLoadingEndereco(true);
     try {
-      const resp = await perfilService.criarEndereco(novoEndereco);
-      setEnderecos([...enderecos, resp.data]);
+      const enderecoCriado = await perfilService.criarEndereco(novoEndereco);
+      setEnderecos([...enderecos, enderecoCriado]);
       setNovoEndereco({
         label: '',
         logradouro: '',
@@ -214,7 +241,18 @@ export default function PerfilScreen() {
 
   return (
     <View className="flex-1 bg-areia">
-      <OceanHeader title="Perfil" />
+      <View
+        className="bg-oceano px-5 pt-14 pb-6 rounded-b-3xl"
+        style={{
+          shadowColor: '#3A9D8F',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 12,
+          elevation: 8,
+        }}
+      >
+        <Text className="text-espuma text-2xl font-bold">Meu Perfil</Text>
+      </View>
 
       <ScrollView
         className="flex-1"
@@ -225,7 +263,7 @@ export default function PerfilScreen() {
         }
       >
         {/* Seção: Dados do Usuário */}
-        <View className="px-4 py-6 bg-white rounded-xl mx-4 my-4">
+        <View className="px-4 py-6 bg-white rounded-xl mx-4 mt-4">
           <Text className="text-ardosia text-lg font-bold mb-4">Meus Dados</Text>
 
           {estado === 'editando' ? (
@@ -254,22 +292,26 @@ export default function PerfilScreen() {
               />
 
               <View className="flex-row gap-3 mt-4">
-                <AppButton
-                  label="Cancelar"
-                  onPress={() => {
-                    setNomeEditado(usuario?.nome || '');
-                    setTelefoneEditado(usuario?.telefone || '');
-                    setEstado('listando');
-                  }}
-                  variant="secondary"
-                  accessibilityLabel="Cancelar edição"
-                />
-                <AppButton
-                  label="Salvar"
-                  onPress={handleAtualizarPerfil}
-                  loading={loadingAtualizacao}
-                  accessibilityLabel="Salvar alterações"
-                />
+                <View className="flex-1">
+                  <AppButton
+                    label="Cancelar"
+                    onPress={() => {
+                      setNomeEditado(usuario?.nome || '');
+                      setTelefoneEditado(usuario?.telefone || '');
+                      setEstado('listando');
+                    }}
+                    variant="secondary"
+                    accessibilityLabel="Cancelar edição"
+                  />
+                </View>
+                <View className="flex-1">
+                  <AppButton
+                    label="Salvar"
+                    onPress={handleAtualizarPerfil}
+                    loading={loadingAtualizacao}
+                    accessibilityLabel="Salvar alterações"
+                  />
+                </View>
               </View>
             </>
           ) : (
@@ -290,7 +332,7 @@ export default function PerfilScreen() {
               <AppButton
                 label="Editar Dados"
                 onPress={() => setEstado('editando')}
-                variant="secondary"
+                variant="outline"
                 accessibilityLabel="Editar dados pessoais"
               />
             </>
@@ -343,15 +385,12 @@ export default function PerfilScreen() {
                   </Text>
                   <Text className="text-marinha text-sm mb-3">{endereco.cep}</Text>
 
-                  <Pressable
+                  <AppButton
+                    label="Remover"
                     onPress={() => handleRemoverEndereco(endereco.id)}
-                    className="flex-row items-center"
+                    variant="outline"
                     accessibilityLabel={`Remover endereço ${endereco.label}`}
-                    accessibilityRole="button"
-                  >
-                    <Ionicons name="trash-outline" size={16} color="#D64550" />
-                    <Text className="text-coral text-sm font-semibold ml-2">Remover</Text>
-                  </Pressable>
+                  />
                 </View>
               ))
             )}
@@ -428,39 +467,47 @@ export default function PerfilScreen() {
             <AppInput
               label="CEP"
               value={novoEndereco.cep}
-              onChangeText={(text) => setNovoEndereco({ ...novoEndereco, cep: text })}
+              onChangeText={(text) => {
+                setNovoEndereco((prev) => ({ ...prev, cep: formatCEP(text) }));
+                setErrosEndereco((prev) => { const n = { ...prev }; delete n.cep; return n; });
+              }}
               placeholder="29160-000"
               keyboardType="numeric"
               error={errosEndereco.cep}
               accessibilityLabel="CEP"
+              editable={!cepLoading}
             />
 
             <View className="flex-row gap-3 mt-4">
-              <AppButton
-                label="Cancelar"
-                onPress={() => {
-                  setEstado('listando');
-                  setNovoEndereco({
-                    label: '',
-                    logradouro: '',
-                    numero: '',
-                    bairro: '',
-                    cidade: '',
-                    estado: '',
-                    cep: '',
-                    complemento: '',
-                  });
-                  setErrosEndereco({});
-                }}
-                variant="secondary"
-                accessibilityLabel="Cancelar criação de endereço"
-              />
-              <AppButton
-                label="Criar"
-                onPress={handleCriarEndereco}
-                loading={loadingEndereco}
-                accessibilityLabel="Criar novo endereço"
-              />
+              <View className="flex-1">
+                <AppButton
+                  label="Cancelar"
+                  onPress={() => {
+                    setEstado('listando');
+                    setNovoEndereco({
+                      label: '',
+                      logradouro: '',
+                      numero: '',
+                      bairro: '',
+                      cidade: '',
+                      estado: '',
+                      cep: '',
+                      complemento: '',
+                    });
+                    setErrosEndereco({});
+                  }}
+                  variant="secondary"
+                  accessibilityLabel="Cancelar criação de endereço"
+                />
+              </View>
+              <View className="flex-1">
+                <AppButton
+                  label="Criar"
+                  onPress={handleCriarEndereco}
+                  loading={loadingEndereco}
+                  accessibilityLabel="Criar novo endereço"
+                />
+              </View>
             </View>
           </View>
         )}
@@ -468,12 +515,12 @@ export default function PerfilScreen() {
         {/* Botão de Logout */}
         {estado === 'listando' && (
           <View className="px-4 py-4">
-            <AppButton
-              label="Fazer Logout"
-              onPress={handleLogout}
-              variant="secondary"
-              accessibilityLabel="Fazer logout"
-            />
+              <AppButton
+                label="Sair da conta"
+                onPress={handleLogout}
+                variant="outline"
+                accessibilityLabel="Sair da conta"
+              />
           </View>
         )}
       </ScrollView>
