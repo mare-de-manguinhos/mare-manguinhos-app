@@ -10,25 +10,31 @@
     "splash": {
       "image": "./assets/FavIcon.png",
       "resizeMode": "contain",
-        "backgroundColor": "#FFFCF7"
+      "backgroundColor": "#FFFCF7"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Logo.png",
-      "backgroundColor": "#FFFCF7"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFCF7"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.alextestacc.maremanguinhosapp"
     },
     "web": {
       "FavIcon": "./assets/FavIcon.png"
     },
     "plugins": [
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9785c157-c2a9-442b-bea7-eb34616c3406"
+      }
+    }
   }
 }
-
