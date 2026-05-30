@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { VitrineData } from '../../types';
@@ -87,15 +88,15 @@ export default function VitrineScreen() {
 
   if (estado === 'carregando' && !dados) {
     return (
-      <View className="flex-1 items-center justify-center bg-areia">
+      <SafeAreaView edges={['top']} className="flex-1 items-center justify-center bg-areia">
         <ActivityIndicator size="large" color="#D45D4A" accessibilityLabel="Carregando vitrine" />
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (estado === 'erro' && !dados) {
     return (
-      <View className="flex-1 items-center justify-center bg-areia px-6">
+      <SafeAreaView edges={['top']} className="flex-1 items-center justify-center bg-areia px-6">
         <Text className="text-ardosia text-lg font-bold text-center mb-2">
           Não foi possível carregar a vitrine
         </Text>
@@ -110,7 +111,7 @@ export default function VitrineScreen() {
         >
           <Text className="text-espuma font-semibold text-base">Tentar novamente</Text>
         </Pressable>
-      </View>
+      </SafeAreaView>
     );
   }
 
