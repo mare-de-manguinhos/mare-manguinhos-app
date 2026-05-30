@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/authStore';
 import SearchBar from './SearchBar';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function VitrineHeader({ buscaTermo, onBuscaChange }: Props) {
+  const insets = useSafeAreaInsets();
   const nome = useAuthStore((s) => s.usuario?.nome ?? 'Convidado');
   const primeiroNome = nome.split(' ')[0];
   const endereco = useAuthStore((s) => s.enderecoPrincipal);
@@ -19,8 +21,9 @@ export default function VitrineHeader({ buscaTermo, onBuscaChange }: Props) {
 
   return (
     <View
-      className="bg-oceano px-5 pt-14 pb-6 rounded-b-3xl overflow-hidden"
+      className="bg-oceano px-5 pb-6 rounded-b-3xl overflow-hidden"
       style={{
+        paddingTop: insets.top + 12,
         shadowColor: '#3A9D8F',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,

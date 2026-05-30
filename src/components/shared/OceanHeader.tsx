@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 interface OceanHeaderProps {
@@ -19,11 +20,12 @@ export default function OceanHeader({
   showBackButton = false,
   onBackPress,
 }: OceanHeaderProps) {
+  const insets = useSafeAreaInsets();
   return (
     <View
       className="bg-terracota items-center px-6"
       style={{
-        paddingTop: 56,
+        paddingTop: insets.top + 12,
         paddingBottom: 44,
         borderBottomLeftRadius: 48,
         borderBottomRightRadius: 48,

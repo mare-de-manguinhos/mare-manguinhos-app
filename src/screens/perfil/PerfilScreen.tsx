@@ -8,6 +8,7 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/authStore';
 import { perfilService } from '../../services/perfilService';
@@ -20,6 +21,7 @@ import { formatCEP, rawCEP } from '../../utils/formatCEP';
 type Estado = 'carregando' | 'editando' | 'listando' | 'criando_endereco' | 'erro';
 
 export default function PerfilScreen() {
+  const insets = useSafeAreaInsets();
   const { logout, usuario: usuarioLogado } = useAuthStore();
 
   const [estado, setEstado] = useState<Estado>('carregando');
@@ -212,7 +214,7 @@ export default function PerfilScreen() {
 
   if (estado === 'carregando' && !usuario) {
     return (
-      <View className="flex-1 items-center justify-center bg-areia">
+      <View className="flex-1 items-center justify-center bg-areia" style={{ paddingTop: insets.top }}>
         <ActivityIndicator size="large" color="#D45D4A" />
       </View>
     );
@@ -220,7 +222,7 @@ export default function PerfilScreen() {
 
   if (estado === 'erro' && !usuario) {
     return (
-      <View className="flex-1 items-center justify-center bg-areia px-6">
+      <View className="flex-1 items-center justify-center bg-areia px-6" style={{ paddingTop: insets.top }}>
         <Text className="text-ardosia text-lg font-bold text-center mb-2">
           Erro ao carregar perfil
         </Text>
@@ -242,8 +244,9 @@ export default function PerfilScreen() {
   return (
     <View className="flex-1 bg-areia">
       <View
-        className="bg-oceano px-5 pt-14 pb-6 rounded-b-3xl"
+        className="bg-oceano px-5 pb-6 rounded-b-3xl"
         style={{
+          paddingTop: insets.top + 12,
           shadowColor: '#3A9D8F',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
