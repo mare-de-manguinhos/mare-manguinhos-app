@@ -1,0 +1,47 @@
+site_name: "Maré de Manguinhos"
+site_description: "Documentação do App Consumidor — Maré de Manguinhos"
+site_url: "https://manguinhos-ifes.github.io/mare-manguinhos-app/"
+repo_url: "https://github.com/manguinhos-ifes/mare-manguinhos-app"
+
+docs_dir: docs
+
+theme:
+  name: material
+  language: pt-BR
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+  palette:
+    primary: teal
+    accent: deep orange
+
+nav:
+  - Home: index.md
+  - Produto:
+    - PRD: prd-mvp-app-mare-manguinhos.md
+  - Técnico:
+    - Arquitetura: arch-mvp-app-mare-manguinhos.md
+    - Rotas da API: map-routes-backend-mare-manguinhos.md
+  - Desenvolvimento:
+    - Codebase: codebase/overview.md
+
+plugins:
+  - search
+  - section-index
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/manguinhos-ifes/mare-manguinhos-app
+  generator: false
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
