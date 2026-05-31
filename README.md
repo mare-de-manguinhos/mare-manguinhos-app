@@ -68,28 +68,15 @@ O **Maré de Manguinhos** resolve esse problema criando um ecossistema digital h
 
 ## 🎨 Protótipo e Interface (UI/UX)
 
-O fluxo de navegação e a interface do módulo do aplicativo foram desenhados visando uma experiência fluida. Este design serve como base visual e arquitetural para a implementação e tipagem dos componentes.
-
 Você pode testar e explorar as telas através do protótipo interativo:
 
 🚀 **[Acessar Protótipo Interativo (Figma)](https://pencil-person-24375050.figma.site/)**
 
 ---
 
-## 🛠️ Tecnologias
+## 🛠️ Stack
 
-> Escolhidas para equilibrar **baixa curva de aprendizado** e **aderência ao mercado atual**.
-
-| Tecnologia | Função |
-|---|---|
-| [React Native](https://reactnative.dev/) + [Expo](https://expo.dev/) | Framework mobile cross-platform (iOS e Android com um único código) |
-| [TypeScript](https://www.typescriptlang.org/) | Linguagem principal com tipagem estática |
-| [NativeWind](https://www.nativewind.dev/) | Estilização com sintaxe Tailwind CSS |
-| [React Navigation](https://reactnavigation.org/) | Navegação entre telas |
-| [Zustand](https://zustand-demo.pmnd.rs/) | Gerenciamento de estado global |
-| [Axios](https://axios-http.com/) | Consumo de APIs REST |
-
-> 💡 **Para começar:** instale o [Node.js](https://nodejs.org/), o app **Expo Go** no seu celular e siga o [Quickstart do Expo](https://docs.expo.dev/get-started/create-a-project/).
+[React Native](https://reactnative.dev/) + [Expo](https://expo.dev/) · [TypeScript](https://www.typescriptlang.org/) · [NativeWind](https://www.nativewind.dev/) · [React Navigation](https://reactnavigation.org/) · [Zustand](https://zustand-demo.pmnd.rs/) · [Axios](https://axios-http.com/)
 
 ---
 
@@ -102,90 +89,24 @@ Você pode testar e explorar as telas através do protótipo interativo:
 
 ---
 
-## 📊 Indicadores de Sucesso (MVP)
+## 📖 Documentação
 
-| Indicador                          | Meta              |
-|------------------------------------|-------------------|
-| Taxa de conversão da vitrine       | ≥ 15%             |
-| Pedidos por semana                 | ≥ 30              |
-| Ticket médio                       | ≥ R$ 45,00        |
-| Taxa de recompra em 30 dias        | ≥ 30%             |
-| Taxa de pedidos entregues          | ≥ 90%             |
+Acesse a **[documentação viva do projeto](https://manguinhos-ifes.github.io/mare-manguinhos-app/)** com PRD, arquitetura, rotas da API e visão do código-fonte — gerada com MkDocs e publicada automaticamente.
 
 ---
 
-## 🗺️ Roadmap
+## 🚀 Começando
 
-| Fase                  | Mês | Entregáveis deste módulo                                             |
-|-----------------------|-----|----------------------------------------------------------------------|
-| 🔬 **Prototipação**   | 1   | Protótipo navegável no Figma + validação com 10 potenciais clientes  |
-| 🤖 **MVP**            | 2   | Vitrine mínima funcional integrada ao backend de estoque             |
-| 🧑‍🤝‍🧑 **Onboarding**   | 3   | Integração de pagamento ativa + fluxo completo de checkout           |
-| 🚀 **Lançamento**     | 4   | App aberto ao público + campanhas em Manguinhos e Laranjeiras        |
-
----
-
-## 📁 Documentação
-
-| Arquivo                      | Descrição                            |
-|------------------------------|--------------------------------------|
-| `prd-mvp-app-mare-manguinhos.md` | Product Requirements Document (PRD) |
-| `pitch-app-mare-manguinhos.pptx` | Apresentação de proposta de produto |
-
----
-
-## 🚀 Primeiros Passos (Bootstrap)
-
-### Pré-requisitos
-
-- [Node.js](https://nodejs.org/) (v18+)
-- [Git](https://git-scm.com/)
-- App **Expo Go** instalado no celular ([Android](https://play.google.com/store/apps/details?id=host.exp.exponent) / [iOS](https://apps.apple.com/app/expo-go/id982107779))
-
-### Instalação
+**Pré-requisitos:** [Node.js](https://nodejs.org/) (v18+) e o app **Expo Go** no celular ([Android](https://play.google.com/store/apps/details?id=host.exp.exponent) / [iOS](https://apps.apple.com/app/expo-go/id982107779)).
 
 ```bash
-# 1. Clone o repositório
 git clone <url-do-repositorio>
 cd mare-manguinhos-app
-
-# 2. Instale as dependências
 npm install
-```
-
-### Rodando o projeto
-
-```bash
 npx expo start
 ```
 
-Após o servidor iniciar, escolha como visualizar:
-
-| Opção | Como |
-|---|---|
-| **Celular (Expo Go)** | Escaneie o QR code exibido no terminal com o app Expo Go |
-| **Navegador (web)** | Pressione `w` no terminal após o servidor subir |
-| **Emulador Android** | Pressione `a` (requer Android Studio configurado) |
-
-> A visualização web é útil para desenvolvimento de UI, mas o alvo final do app é **iOS e Android**.
-
----
-
-## 🤝 Contribuindo
-
-```bash
-# 1. Faça um fork do repositório
-# 2. Crie uma branch para sua feature
-git checkout -b feature/minha-contribuicao
-
-# 3. Commit suas alterações
-git commit -m "feat: adiciona minha contribuição"
-
-# 4. Envie para o seu fork
-git push origin feature/minha-contribuicao
-
-# 5. Abra um Pull Request
-```
+Escaneie o QR code com o Expo Go (celular), ou pressione `w` para web / `a` para emulador Android.
 
 ---
 
@@ -197,9 +118,8 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 <div align="center">
 
-Desenvolvido com 🐟 e ❤️ para a comunidade de Manguinhos
-
-**Ifes Campus Serra — Extensão em Desenvolvimento de Software**
-Professor: Paulo Sérgio dos Santos Júnior
+**Equipe:** Alex Rossoni Junior · Eduarda Ferrari · Josué Ramos Souza · Julia Neiva  
+**Professor:** Paulo Sérgio dos Santos Júnior  
+**Ifes Campus Serra** — Extensão em Desenvolvimento de Software
 
 </div>

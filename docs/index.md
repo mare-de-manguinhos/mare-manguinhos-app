@@ -30,7 +30,7 @@ O Maré de Manguinhos é um aplicativo mobile que permite aos moradores de Mangu
 ## Links
 
 - [Repositório no GitHub](https://github.com/manguinhos-ifes/mare-manguinhos-app)
-- [Protótipo no Figma](https://www.figma.com/design/SfFC5RLT8ftEcnYLFErAq9/MVP---Mare-de-Manguinhos)
+- [Protótipo no Figma](https://pencil-person-24375050.figma.site/)
 
 ---
 
