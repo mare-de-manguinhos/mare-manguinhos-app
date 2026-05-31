@@ -91,7 +91,7 @@ Você pode testar e explorar as telas através do protótipo interativo:
 
 ## 📖 Documentação
 
-Acesse a **[documentação viva do projeto](https://manguinhos-ifes.github.io/mare-manguinhos-app/)** com PRD, arquitetura, rotas da API e visão do código-fonte — gerada com MkDocs e publicada automaticamente.
+Acesse a **[documentação viva do projeto](https://mare-de-manguinhos.github.io/mare-manguinhos-app/)** com PRD, arquitetura, rotas da API e visão do código-fonte — gerada com MkDocs e publicada automaticamente.
 
 ---
 
