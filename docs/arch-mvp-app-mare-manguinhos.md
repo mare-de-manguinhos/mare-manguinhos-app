@@ -339,7 +339,7 @@ export const perfilService = {
 // services/freteService.ts
 export const freteService = {
   calcular: (params: { endereco: string; latitude?: number; longitude?: number }) =>
-    api.post<{ valorFrete: number; prazoEstimadoMinutos: number }>('/api/app/frete/calcular', params),
+    api.post<{ valorFrete: number; prazoEstimadoMinutos: number }>('/api/app-frete/calcular', params),
 };
 ```
 

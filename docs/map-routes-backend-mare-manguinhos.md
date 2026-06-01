@@ -17,7 +17,7 @@
 | Vitrine (Busca) | `GET` | `/api/app/produtos` | Lista de produtos com filtros (categoria, pescador, busca) |
 | Produto | `GET` | `/api/app/produtos/:id` | Detalhes de um produto |
 | Checkout | `POST` | `/api/app/pedidos` | Criar pedido |
-| Checkout | `POST` | `/api/app/frete/calcular` | Calcular frete por endereço |
+| Checkout | `POST` | `/api/app-frete/calcular` | Calcular frete por endereço |
 | Checkout | `POST` | `/api/app/pagamento/pix` | Gerar QR Code Pix |
 | Checkout | `POST` | `/api/app/pagamento/cartao` | Processar pagamento com cartão |
 | Acompanhamento | `GET` | `/api/app/pedidos/:id` | Status de um pedido |
@@ -270,7 +270,7 @@
 
 **Endpoints:**
 
-#### `POST /api/app/frete/calcular`
+#### `POST /api/app-frete/calcular`
 
 **Body:**
 ```json
@@ -677,7 +677,7 @@ Para o app funcionar, o backend precisará de pelo menos estas tabelas novas:
 
 ### Fase 2 — Importante (melhora a experiência)
 - [ ] `GET /api/app/produtos` (busca e filtros)
-- [ ] `POST /api/app/frete/calcular`
+- [ ] `POST /api/app-frete/calcular`
 - [ ] `GET /api/app/perfil`
 - [ ] `PUT /api/app/perfil`
 - [ ] `GET /api/app/enderecos`
@@ -725,7 +725,7 @@ CONSUMIDOR (App)                          BACKEND (API)
       │                                        │
       │  (carrinho é local no app)             │
       │                                        │
-      │  POST /api/app/frete/calcular          │
+      │  POST /api/app-frete/calcular          │
       ├───────────────────────────────────────►│
       │  ←── valor do frete                    │
       │───────────────────────────────────────┤
